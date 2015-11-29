@@ -1,0 +1,44 @@
+# Temporary files
+*~
+*.autosave
+*.orig
+*.rej
+*.flc
+*.swp
+
+# Generated files
+*.dll
+*.exe
+*.a
+*.core
+*.moc
+*.o
+*.obj
+*.so
+*.so.*
+*_pch.h.cpp
+*_resource.rc
+*.qm
+.DS_Store
+Makefile*
+*.prl
+*.app
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+Thumbs.db
+*.res
+*.rc
+/.qmake.cache
+/.qmake.stash
+
+# qtcreator generated files
+*.pro.user*
+
+# MinGW generated files
+*.Debug
+*.Release
+
+# Output dirs
+debug/
+release/
