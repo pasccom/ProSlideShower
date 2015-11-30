@@ -86,9 +86,10 @@ bool PresModel::setCurrentPageNumber(int page)
 
 QImage PresModel::getPage(int number, const QRect& boundingRect, int horizontalVirtualScreen, int verticalVirtualScreen) const
 {
-    Q_ASSERT((horizontalVirtualScreen > 0) && (horizontalVirtualScreen <= mHVirtualScreens));
-    Q_ASSERT((verticalVirtualScreen > 0) && (verticalVirtualScreen <= mVVirtualScreens));
-
+    if ((horizontalVirtualScreen <= 0) || (horizontalVirtualScreen > mHVirtualScreens))
+        return QImage();
+    if ((verticalVirtualScreen <= 0) || (verticalVirtualScreen > mVVirtualScreens))
+         return QImage();
     if (mDoc == NULL)
         return QImage();
 
