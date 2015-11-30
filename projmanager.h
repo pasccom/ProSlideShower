@@ -23,6 +23,8 @@ public slots:
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
     void keyReleaseEvent(QKeyEvent *ke);
+private slots:
+    void handleLoadFile(void);
 private:
     PresModel* mModel;
     ProjController* mController;

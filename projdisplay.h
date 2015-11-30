@@ -8,8 +8,7 @@ class PresModel;
 class ProjDisplay : public QWidget
 {
 public:
-    inline ProjDisplay(PresModel* model, QWidget* parent = NULL) :
-        QWidget(parent, Qt::FramelessWindowHint), mModel(model), mOffset(0), mHVirtualScreen(1), mVVirtualScreen(1) {}
+    ProjDisplay(PresModel* model, QWidget* parent = NULL);
 
     inline void setOffset(int offset) {Q_ASSERT((offset >= -1) && (offset <= 1)); mOffset = offset;}
     inline int offset(void) const {return mOffset;}
@@ -20,6 +19,7 @@ public:
     inline int verticalVirtualScreen(void) const {return mVVirtualScreen;}
 protected:
     void paintEvent(QPaintEvent *pe);
+    void contextMenuEvent(QContextMenuEvent *cme);
 private:
     PresModel* mModel;
     int mOffset;

@@ -12,10 +12,10 @@
 ProjManager::ProjManager(QObject *parent) :
     QObject(parent)
 {
-
     qApp->installEventFilter(this);
 
     QDesktopWidget* desktop = qApp->desktop();
+    QAction *loadFileAction = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
 
     mModel = new PresModel(QString::null, this);
     mModel->setVirtualScreens(2);
@@ -35,7 +35,7 @@ ProjManager::ProjManager(QObject *parent) :
             mDisplays[d] = new ProjDisplay(mModel, NULL);
             mDisplays[d]->setGeometry(desktop->screenGeometry(d));
             mDisplays[d]->show();
-
+            mDisplays[d]->addAction(loadFileAction);
 
             connect(mModel, SIGNAL(currentPageChanged()),
                     mDisplays[d], SLOT(update()));
@@ -43,6 +43,9 @@ ProjManager::ProjManager(QObject *parent) :
             mDisplays[d] = NULL;
         }
     }
+
+    connect(loadFileAction, SIGNAL(triggered()),
+            this, SLOT(handleLoadFile()));
 
     connect(mModel, SIGNAL(currentPageChanged()),
             mController, SLOT(handleSlideChange()));
@@ -54,15 +57,27 @@ ProjManager::~ProjManager(void)
     delete mController;
 }
 
+void ProjManager::handleLoadFile(void)
+{
+    QFileDialog *fileDialog = new QFileDialog(mController, tr("Choose a PDF file"), "", "*.pdf");
+    fileDialog->setFileMode(QFileDialog::ExistingFile);
+    fileDialog->setWindowModality(Qt::ApplicationModal);
+
+    if ((fileDialog->exec() == QDialog::Rejected) || fileDialog->selectedFiles().isEmpty())
+        return;
+    mModel->load(fileDialog->selectedFiles().first());
+}
+
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)
 {
-    Q_UNUSED(watched);
-
     switch(event->type()) {
     case QEvent::KeyRelease:
         keyReleaseEvent(static_cast<QKeyEvent *>(event));
         return event->isAccepted();
     case QEvent::Close:
+        qDebug() << watched->metaObject()->className();
+        if (qobject_cast<QMenu *>(watched) != NULL)
+            return false;
         qApp->quit();
         return true;
     default:
