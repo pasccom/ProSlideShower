@@ -7,7 +7,7 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
 
     ProjManager manager(NULL);
-    manager.load("/home/pascal/Documents/soutenance.pdf");
+    Q_UNUSED(manager);
 
     return app.exec();
 }
