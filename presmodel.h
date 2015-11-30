@@ -19,9 +19,9 @@ public:
     inline bool isOK(void) const {return (mDoc != NULL);}
 
     inline int getCurrentPageNumber(void) const {return mCurrentPage;}
-    inline int getCurrentFrameNumber(void) const {return mFramePages.isEmpty() ? -1 : mFramePages.at(mCurrentPage);}
+    inline int getCurrentFrameNumber(void) const {return mFramePages.isEmpty() ? getCurrentPageNumber() + 1 : mFramePages.at(mCurrentPage);}
     int getPageCount(void) const;
-    inline int getFrameCount(void) const {return mTotalFrames;}
+    inline int getFrameCount(void) const {return mTotalFrames == 0 ? getPageCount() : mTotalFrames;}
 
     QImage getPage(int number, const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const;
     inline QImage getCurrentPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
