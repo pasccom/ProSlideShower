@@ -14,6 +14,38 @@ ProjDisplay::ProjDisplay(PresModel* model, QWidget* parent) :
     mVVirtualScreen = 1;
 }
 
+void ProjDisplay::setHorizontalVirtualScreen(int horizontal)
+{
+    int old = mHVirtualScreen;
+
+    if(horizontal > 0) {
+        mHVirtualScreen = horizontal;
+    } else {
+        QAction* senderAction = qobject_cast<QAction *>(sender());
+        if ((senderAction != NULL) && (senderAction->data().type() == QVariant::Int) && (senderAction->data().toInt() > 0))
+            mHVirtualScreen = senderAction->data().toInt();
+    }
+
+    if (mHVirtualScreen != old)
+        repaint();
+}
+
+void ProjDisplay::setVericalVirtualScreen(int vertical)
+{
+    int old = mVVirtualScreen;
+
+    if(vertical > 0) {
+        mVVirtualScreen = vertical;
+    } else {
+        QAction* senderAction = qobject_cast<QAction *>(sender());
+        if ((senderAction != NULL) && (senderAction->data().type() == QVariant::Int) && (senderAction->data().toInt() > 0))
+            mVVirtualScreen = senderAction->data().toInt();
+    }
+
+    if (mVVirtualScreen != old)
+        repaint();
+}
+
 void ProjDisplay::paintEvent(QPaintEvent *pe)
 {
     QPainter p(this);
