@@ -50,3 +50,6 @@ unix {
     else:DESTDIR = ./release
 }
 
+RESOURCES += \
+    proslideshower.qrc
+
