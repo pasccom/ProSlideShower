@@ -64,6 +64,16 @@ bool PresModel::load(const QString& file)
     return true;
 }
 
+void PresModel::setVirtualScreens(int horizontal, int vertical)
+{
+    Q_ASSERT(horizontal > 0);
+    Q_ASSERT(vertical > 0);
+
+    mHVirtualScreens = horizontal;
+    mVVirtualScreens = vertical;
+    emit currentPageChanged();
+}
+
 bool PresModel::setCurrentPageNumber(int page)
 {
     if ((page < 0) || (page >= mDoc->numPages()))

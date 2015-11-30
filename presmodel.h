@@ -28,7 +28,7 @@ public:
     inline QImage getNextPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage + 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
     inline QImage getPrevPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage - 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
 
-    inline void setVirtualScreens(int horizontal, int vertical = 1) {Q_ASSERT(horizontal > 0); Q_ASSERT(vertical > 0); mHVirtualScreens = horizontal; mVVirtualScreens = vertical;}
+    void setVirtualScreens(int horizontal, int vertical = 1);
     inline int horizontalVirtualScreens(void) const {return mHVirtualScreens;}
     inline int verticalVirtualScreens(void) const {return mVVirtualScreens;}
 
