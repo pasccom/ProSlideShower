@@ -21,6 +21,10 @@ HEADERS += \
     presstyle.h
 
 # Link against the right version of libPoppler
+win32 {
+    INCLUDEPATH += C:/Dev/Poppler/include
+    LIBS += -LC:/Dev/Poppler/lib
+}
 greaterThan(QT_VERSION, 5.0.0) {
     LIBS += -lpoppler-qt5
 } else {
