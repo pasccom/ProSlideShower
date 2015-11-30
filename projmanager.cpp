@@ -15,10 +15,8 @@ ProjManager::ProjManager(QObject *parent) :
     qApp->installEventFilter(this);
 
     QDesktopWidget* desktop = qApp->desktop();
-    QAction *loadFileAction = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
 
     mModel = new PresModel(QString::null, this);
-    mModel->setVirtualScreens(3);
 
     mController = new ProjController(mModel, NULL);
     mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
@@ -35,7 +33,6 @@ ProjManager::ProjManager(QObject *parent) :
             mDisplays[d] = new ProjDisplay(mModel, NULL);
             mDisplays[d]->setGeometry(desktop->screenGeometry(d));
             mDisplays[d]->show();
-            mDisplays[d]->addAction(loadFileAction);
 
             connect(mModel, SIGNAL(currentPageChanged()),
                     mDisplays[d], SLOT(update()));
@@ -44,8 +41,7 @@ ProjManager::ProjManager(QObject *parent) :
         }
     }
 
-    connect(loadFileAction, SIGNAL(triggered()),
-            this, SLOT(handleLoadFile()));
+    updateDisplayActions();
 
     connect(mModel, SIGNAL(currentPageChanged()),
             mController, SLOT(handleSlideChange()));
@@ -66,6 +62,12 @@ void ProjManager::handleLoadFile(void)
     if ((fileDialog.exec() == QDialog::Rejected) || fileDialog.selectedFiles().isEmpty())
         return;
 
+    mModel->load(fileDialog.selectedFiles().first());
+    handleVirtualScreens();
+}
+
+void ProjManager::handleVirtualScreens(void)
+{
     QInputDialog virtualScreenDialog(mController);
     virtualScreenDialog.setWindowTitle(tr("Number of virtual screens"));
     virtualScreenDialog.setLabelText(tr("Enter number of virtual screens in the presentation"));
@@ -78,7 +80,47 @@ void ProjManager::handleLoadFile(void)
         return;
 
     mModel->setVirtualScreens(virtualScreenDialog.intValue());
-    mModel->load(fileDialog.selectedFiles().first());
+    updateDisplayActions();
+}
+
+void ProjManager::updateDisplayActions(void)
+{
+    QAction* loadFileAction = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
+    QAction* virtualScreenAction = new QAction(tr("&Virtual screen number"), this);
+
+    connect(loadFileAction, SIGNAL(triggered()),
+            this, SLOT(handleLoadFile()));
+    connect(virtualScreenAction, SIGNAL(triggered()),
+            this, SLOT(handleVirtualScreens()));
+
+    QSet<QAction *> actionsToDelete;
+    for (int d = 0; d < mDisplays.size(); d++) {
+        if (mDisplays[d] == NULL)
+            continue;
+
+        QList<QAction *> actions = mDisplays[d]->actions();
+        foreach (QAction *action, actions) {
+            mDisplays[d]->removeAction(action);
+            actionsToDelete.insert(action);
+        }
+
+        mDisplays[d]->addAction(loadFileAction);
+        if (mModel->isOK())
+            mDisplays[d]->addAction(virtualScreenAction);
+        if (mModel->isOK() && (mModel->horizontalVirtualScreens() > 1)) {
+            for (int s = 0; s < mModel->horizontalVirtualScreens(); s++) {
+                QAction* useVirtualScreenAction = new QAction(tr("Use virtual screen &%1").arg(s + 1), this);
+                useVirtualScreenAction->setData(QVariant(s + 1));
+                connect(useVirtualScreenAction, SIGNAL(triggered()),
+                        mDisplays[d], SLOT(setHorizontalVirtualScreen()));
+                mDisplays[d]->addAction(useVirtualScreenAction);
+            }
+        }
+    }
+    qDeleteAll(actionsToDelete);
+
+
+
 }
 
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)

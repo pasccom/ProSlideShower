@@ -25,7 +25,10 @@ protected:
     void keyReleaseEvent(QKeyEvent *ke);
 private slots:
     void handleLoadFile(void);
+    void handleVirtualScreens(void);
 private:
+    void updateDisplayActions(void);
+
     PresModel* mModel;
     ProjController* mController;
     QVector<ProjDisplay*> mDisplays;
