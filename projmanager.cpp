@@ -18,7 +18,7 @@ ProjManager::ProjManager(QObject *parent) :
     QAction *loadFileAction = new QAction(QIcon(":/icons/open.png"), tr("&Open"), this);
 
     mModel = new PresModel(QString::null, this);
-    mModel->setVirtualScreens(2);
+    mModel->setVirtualScreens(3);
 
     mController = new ProjController(mModel, NULL);
     mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
@@ -59,13 +59,26 @@ ProjManager::~ProjManager(void)
 
 void ProjManager::handleLoadFile(void)
 {
-    QFileDialog *fileDialog = new QFileDialog(mController, tr("Choose a PDF file"), "", "*.pdf");
-    fileDialog->setFileMode(QFileDialog::ExistingFile);
-    fileDialog->setWindowModality(Qt::ApplicationModal);
+    QFileDialog fileDialog(mController, tr("Choose a PDF file"), "", "*.pdf");
+    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    fileDialog.setWindowModality(Qt::ApplicationModal);
 
-    if ((fileDialog->exec() == QDialog::Rejected) || fileDialog->selectedFiles().isEmpty())
+    if ((fileDialog.exec() == QDialog::Rejected) || fileDialog.selectedFiles().isEmpty())
         return;
-    mModel->load(fileDialog->selectedFiles().first());
+
+    QInputDialog virtualScreenDialog(mController);
+    virtualScreenDialog.setWindowTitle(tr("Number of virtual screens"));
+    virtualScreenDialog.setLabelText(tr("Enter number of virtual screens in the presentation"));
+    virtualScreenDialog.setInputMode(QInputDialog::IntInput);
+    virtualScreenDialog.setIntMinimum(1);
+    virtualScreenDialog.setIntMaximum(8);
+    virtualScreenDialog.setIntStep(1);
+    virtualScreenDialog.setIntValue(1);
+    if (virtualScreenDialog.exec() == QDialog::Rejected)
+        return;
+
+    mModel->setVirtualScreens(virtualScreenDialog.intValue());
+    mModel->load(fileDialog.selectedFiles().first());
 }
 
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)
