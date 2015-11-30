@@ -48,6 +48,8 @@ bool PresModel::load(const QString& file)
         return false;
     }
 
+    mDoc->setRenderHint(Poppler::Document::TextAntialiasing);
+
     qDebug() << mDoc->metadata();
     qDebug() << mDoc->infoKeys();
     foreach (QString key, mDoc->infoKeys())
