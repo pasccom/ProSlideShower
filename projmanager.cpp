@@ -21,7 +21,7 @@ ProjManager::ProjManager(QObject *parent) :
     mController = new ProjController(mModel, NULL);
     mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
     mController->show();
-    mController->setTotalTime(QTime(0, 1, 0));
+    mController->setTotalTime(QTime(0, 45, 0));
 
     mDisplays.resize(desktop->screenCount());
 
@@ -118,9 +118,6 @@ void ProjManager::updateDisplayActions(void)
         }
     }
     qDeleteAll(actionsToDelete);
-
-
-
 }
 
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)
@@ -146,10 +143,14 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
 {
     switch (ke->key()) {
     case Qt::Key_Left:
+    case Qt::Key_Up:
+    case Qt::Key_PageUp:
         ke->accept();
         mModel->goToPrevPage();
         break;
     case Qt::Key_Right:
+    case Qt::Key_Down:
+    case Qt::Key_PageDown:
         ke->accept();
         mModel->goToNextPage();
         break;
