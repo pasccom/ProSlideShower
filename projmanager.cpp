@@ -23,6 +23,10 @@ ProjManager::ProjManager(QObject *parent) :
     mController->show();
     mController->setTotalTime(QTime(0, 45, 0));
 
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), mController, SLOT(start()), 0, Qt::ApplicationShortcut);
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), mController, SLOT(pause()), 0, Qt::ApplicationShortcut);
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_X), mController, SLOT(stop()), 0, Qt::ApplicationShortcut);
+
     mDisplays.resize(desktop->screenCount());
 
     qDebug() << desktop->screenCount() << desktop->primaryScreen();
@@ -153,24 +157,6 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
     case Qt::Key_PageDown:
         ke->accept();
         mModel->goToNextPage();
-        break;
-    case Qt::Key_S:
-        if (ke->modifiers() == Qt::CTRL) {
-            ke->accept();
-            mController->start();
-        }
-        break;
-    case Qt::Key_P:
-        if (ke->modifiers() == Qt::CTRL) {
-            ke->accept();
-            mController->pause();
-        }
-        break;
-    case Qt::Key_X:
-        if (ke->modifiers() == Qt::CTRL) {
-            ke->accept();
-            mController->stop();
-        }
         break;
     }
 }
