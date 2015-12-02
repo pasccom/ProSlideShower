@@ -84,6 +84,15 @@ bool PresModel::setCurrentPageNumber(int page)
     return true;
 }
 
+int PresModel::getCurrentFrameNumber(void) const
+{
+    if (mFramePages.isEmpty())
+        return getCurrentPageNumber() + 1;
+    if (mCurrentPage >= mFramePages.size())
+        return getCurrentPageNumber() + 1;
+    return mFramePages.at(mCurrentPage);
+}
+
 QImage PresModel::getPage(int number, const QRect& boundingRect, int horizontalVirtualScreen, int verticalVirtualScreen) const
 {
     if ((horizontalVirtualScreen <= 0) || (horizontalVirtualScreen > mHVirtualScreens))
