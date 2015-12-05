@@ -38,6 +38,10 @@ ProjManager::ProjManager(QObject *parent) :
             mDisplays[d]->setGeometry(desktop->screenGeometry(d));
             mDisplays[d]->show();
 
+            connect(mModel, SIGNAL(documentChanged()),
+                    mDisplays[d], SLOT(update()));
+            connect(mModel, SIGNAL(virtualScreenNumberChanged()),
+                    mDisplays[d], SLOT(update()));
             connect(mModel, SIGNAL(currentPageChanged()),
                     mDisplays[d], SLOT(update()));
         } else {
@@ -47,6 +51,13 @@ ProjManager::ProjManager(QObject *parent) :
 
     updateDisplayActions();
 
+
+    connect(mModel, SIGNAL(documentChanged()),
+            mController, SLOT(handleDocumentChange()));
+    connect(mModel, SIGNAL(virtualScreenNumberChanged()),
+            mController, SLOT(handleVirtualScreenNumberChange()));
+    connect(mModel, SIGNAL(currentFrameChanged()),
+            mController, SLOT(handleFrameChange()));
     connect(mModel, SIGNAL(currentPageChanged()),
             mController, SLOT(handleSlideChange()));
 }

@@ -19,25 +19,28 @@ public:
     inline bool isOK(void) const {return (mDoc != NULL);}
 
     inline int getCurrentPageNumber(void) const {return mCurrentPage;}
-    int getCurrentFrameNumber(void) const;
     int getPageCount(void) const;
-    inline int getFrameCount(void) const {return mTotalFrames == 0 ? getPageCount() : mTotalFrames;}
 
-    QImage getPage(int number, const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const;
-    inline QImage getCurrentPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
-    inline QImage getNextPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage + 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
-    inline QImage getPrevPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage - 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
+    int getCurrentFrameNumber(void) const;
+    inline int getFrameCount(void) const {return mTotalFrames == 0 ? getPageCount() : mTotalFrames;}
 
     void setVirtualScreens(int horizontal, int vertical = 1);
     inline int horizontalVirtualScreens(void) const {return mHVirtualScreens;}
     inline int verticalVirtualScreens(void) const {return mVVirtualScreens;}
 
+    QImage getPage(int number, const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const;
+    inline QImage getCurrentPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
+    inline QImage getNextPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage + 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
+    inline QImage getPrevPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage - 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
 public slots:
     bool setCurrentPageNumber(int page);
     inline bool goToNextPage(void) {return setCurrentPageNumber(mCurrentPage + 1);}
     inline bool goToPrevPage(void) {return setCurrentPageNumber(mCurrentPage - 1);}
 signals:
     void currentPageChanged(void);
+    void currentFrameChanged(void);
+    void virtualScreenNumberChanged(void);
+    void documentChanged(void);
 private:
     bool parseNavFile(const QString& pdfFilePath);
     void parseNavLine(const QString& line);

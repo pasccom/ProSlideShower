@@ -93,14 +93,36 @@ void ProjController::stop(void)
     updateTime();
 }
 
+
+void ProjController::handleDocumentChange(void)
+{
+    updateFrame();
+    updateDisplays();
+}
+
+void ProjController::handleVirtualScreenNumberChange(void)
+{
+    updateDisplays();
+}
+
+void ProjController::handleFrameChange(void)
+{
+    updateFrame();
+    updateDisplays();
+}
+
 void ProjController::handleSlideChange(void)
 {
-   updateSlide();
+    //updateSlide();
+    updateDisplays();
+}
 
+void ProjController::updateDisplays(void)
+{
     for (int d = 0; d < mDisplays.size(); d++)
         mDisplays[d]->repaint();
-
 }
+
 
 void ProjController::updateTime(void)
 {
@@ -113,7 +135,7 @@ void ProjController::updateTime(void)
     updateColor();
 }
 
-void ProjController::updateSlide(void)
+void ProjController::updateFrame(void)
 {
     mSlideProgress->setRange(1, mModel->getFrameCount());
     mSlideProgress->setValue(mModel->getCurrentFrameNumber());

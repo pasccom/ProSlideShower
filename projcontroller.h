@@ -28,6 +28,9 @@ public:
 signals:
 
 public slots:
+    void handleDocumentChange(void);
+    void handleVirtualScreenNumberChange(void);
+    void handleFrameChange(void);
     void handleSlideChange(void);
     inline void start(void) {if (!mTimer->isActive()) mTimer->start();}
     inline void pause(void) {if (mTimer->isActive()) mTimer->stop();}
@@ -35,8 +38,9 @@ public slots:
 private slots:
     inline void handleSecondStep(void) {mTime = mTime.addSecs(1); updateTime();}
 private:
+    void updateDisplays(void);
     void updateTime(void);
-    void updateSlide(void);
+    void updateFrame(void);
     void updateColor(void);
 
     PresModel* mModel;

@@ -60,7 +60,7 @@ bool PresModel::load(const QString& file)
     qDebug() << mTotalFrames << mFramePages;
 
     mCurrentPage = 0;
-    emit currentPageChanged();
+    emit documentChanged();
     return true;
 }
 
@@ -71,7 +71,7 @@ void PresModel::setVirtualScreens(int horizontal, int vertical)
 
     mHVirtualScreens = horizontal;
     mVVirtualScreens = vertical;
-    emit currentPageChanged();
+    emit virtualScreenNumberChanged();
 }
 
 bool PresModel::setCurrentPageNumber(int page)
@@ -79,8 +79,11 @@ bool PresModel::setCurrentPageNumber(int page)
     if ((page < 0) || (page >= mDoc->numPages()))
         return false;
 
+    int oldFrame = getCurrentFrameNumber();
     mCurrentPage = page;
     emit currentPageChanged();
+    if (getCurrentFrameNumber() != oldFrame)
+        emit currentFrameChanged();
     return true;
 }
 
