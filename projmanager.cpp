@@ -52,15 +52,6 @@ ProjManager::ProjManager(QObject *parent) :
 
     updateDisplayActions();
 
-    connect(model(), SIGNAL(documentChanged()),
-            mController, SLOT(handleDocumentChange()));
-    connect(model(), SIGNAL(virtualScreenNumberChanged()),
-            mController, SLOT(handleVirtualScreenNumberChange()));
-    connect(model(), SIGNAL(currentFrameChanged()),
-            mController, SLOT(handleFrameChange()));
-    connect(model(), SIGNAL(currentPageChanged()),
-            mController, SLOT(handleSlideChange()));
-
 #ifdef SIMULATING_DESKTOPS
     delete desktop;
 #endif
@@ -68,17 +59,14 @@ ProjManager::ProjManager(QObject *parent) :
 
 ProjManager::~ProjManager(void)
 {
-    /*for (int d = 0; d < size(); d++)
-        delete at(d);*/
     delete mController;
 }
 
 
 void ProjManager::load(const QString& file)
 {
-    if (!model()->load(file))
-        return;
-    setModel(model());
+    SubDisplayHandler::load(file);
+    mController->setModel(model());
 }
 
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)
