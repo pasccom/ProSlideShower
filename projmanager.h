@@ -1,16 +1,12 @@
 #ifndef PROJMANAGER_H
 #define PROJMANAGER_H
 
-#include <QObject>
-#include <QVector>
-#include "presmodel.h"
+#include "subdisplayhandler.h"
 
-class PresModel;
 class ProjController;
-class ProjDisplay;
 class QKeyEvent;
 
-class ProjManager : public QObject
+class ProjManager : public SubDisplayHandler
 {
     Q_OBJECT
 public:
@@ -19,19 +15,13 @@ public:
 signals:
 
 public slots:
-    inline void load(const QString& file) {mModel->load(file);}
+    void load(const QString& file);
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
-    void keyReleaseEvent(QKeyEvent *ke);
-private slots:
-    void handleLoadFile(void);
-    void handleVirtualScreens(void);
+    void keyReleaseEvent(QKeyEvent* ke);
 private:
-    void updateDisplayActions(void);
 
-    PresModel* mModel;
     ProjController* mController;
-    QVector<ProjDisplay*> mDisplays;
 };
 
 #endif // PROJMANAGER_H
