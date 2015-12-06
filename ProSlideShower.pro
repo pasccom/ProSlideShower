@@ -11,14 +11,26 @@ SOURCES += \
     presmodel.cpp \
     projcontroller.cpp \
     projmanager.cpp \
-    presstyle.cpp
+    presstyle.cpp \
+    tests/desktopsimulatorwidget.cpp
 
 HEADERS += \
     projdisplay.h \
     presmodel.h \
     projcontroller.h \
     projmanager.h \
-    presstyle.h
+    presstyle.h \
+    tests/desktopsimulatorwidget.h
+
+SIMULATING_DESKTOPS=yes
+H_DESKTOPS=2
+V_DESKTOPS=1
+
+!isEmpty(SIMULATING_DESKTOPS) {
+    DEFINES+="SIMULATING_DESKTOPS"
+    DEFINES+="SIMULATING_H_DESKTOPS=$$H_DESKTOPS"
+    DEFINES+="SIMULATING_V_DESKTOPS=$$V_DESKTOPS"
+}
 
 # Link against the right version of libPoppler
 win32 {

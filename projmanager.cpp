@@ -3,6 +3,8 @@
 #include "projcontroller.h"
 #include "projdisplay.h"
 
+#include "tests/desktopsimulatorwidget.h"
+
 #include <QtCore>
 #include <QtGui>
 #if QT_VERSION >= 0x050000
@@ -14,7 +16,11 @@ ProjManager::ProjManager(QObject *parent) :
 {
     qApp->installEventFilter(this);
 
+#ifndef SIMULATING_DESKTOPS
     QDesktopWidget* desktop = qApp->desktop();
+#else
+    DesktopSimulatorWidget *desktop = new DesktopSimulatorWidget(SIMULATING_H_DESKTOPS, SIMULATING_V_DESKTOPS);
+#endif
 
     mModel = new PresModel(QString::null, this);
 
@@ -156,6 +162,8 @@ bool ProjManager::eventFilter(QObject* watched, QEvent* event)
 
 void ProjManager::keyReleaseEvent(QKeyEvent *ke)
 {
+    //qDebug() << "key release event" << ke->key() << ke->modifiers();
+
     switch (ke->key()) {
     case Qt::Key_Left:
     case Qt::Key_Up:
