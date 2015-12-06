@@ -35,9 +35,7 @@ public slots:
     void goToPrevPage() {mDisplays->goToPrevPage();}
 
     void handleDocumentChange(void);
-    void handleVirtualScreenNumberChange(void);
     void handleFrameChange(void);
-    void handleSlideChange(void);
 
     inline void start(void) {if (!mTimer->isActive()) mTimer->start();}
     inline void pause(void) {if (mTimer->isActive()) mTimer->stop();}

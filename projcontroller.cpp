@@ -22,9 +22,6 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     mTimer->setInterval(1000);
     mTimer->setSingleShot(false);
 
-    connect(mTimer, SIGNAL(timeout()),
-            this, SLOT(handleSecondStep()));
-
     // Style, palette and font override:
     mStyle = new PresStyle();
 
@@ -45,8 +42,6 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     for (int d = 0; d < mDisplays->size(); d++) {
         mDisplays->replace(d, new ProjDisplay(model, this));
         mDisplays->at(d)->setOffset(d - 1);
-        /*if (d == 1)
-            mDisplays->at(d)->setHorizontalVirtualScreen(2);*/
         mSplitter->addWidget(mDisplays->at(d));
     }
 
@@ -83,8 +78,15 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
 
     setLayout(mainLayout);
 
-    handleSlideChange();
+    handleFrameChange();
     mDisplays->updateDisplayActions();
+
+    connect(mTimer, SIGNAL(timeout()),
+            this, SLOT(handleSecondStep()));
+    connect(model, SIGNAL(documentChanged()),
+            this, SLOT(handleDocumentChange()));
+    connect(model, SIGNAL(currentFrameChanged()),
+            this, SLOT(handleFrameChange()));
 }
 
 void ProjController::stop(void)
@@ -103,20 +105,9 @@ void ProjController::handleDocumentChange(void)
     //updateDisplays();
 }
 
-void ProjController::handleVirtualScreenNumberChange(void)
-{
-    //updateDisplays();
-}
-
 void ProjController::handleFrameChange(void)
 {
     updateFrame();
-    //updateDisplays();
-}
-
-void ProjController::handleSlideChange(void)
-{
-    //updateSlide();
     //updateDisplays();
 }
 
