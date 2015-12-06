@@ -22,13 +22,14 @@ public:
 
     void goToNextPage();
     void goToPrevPage();
-protected:
+
     void updateDisplayActions(void);
-    void updateDisplayActions(ProjDisplay* display);
 private slots:
     void handleLoadFile(void);
     void handleVirtualScreens(void);
 private:
+    void updateDisplayActions(ProjDisplay* display);
+
     PresModel* mModel;
     QWidget* mParent;
 };
