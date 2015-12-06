@@ -110,8 +110,7 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
     case Qt::Key_PageUp:
         ke->accept();
         if (model() != NULL)
-            model()->goToNextPage();
-        model()->goToPrevPage();
+            model()->goToPrevPage();
         goToPrevPage();
         break;
     case Qt::Key_Right:
