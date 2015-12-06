@@ -7,11 +7,66 @@
 #endif
 
 ProjDisplay::ProjDisplay(PresModel* model, QWidget* parent) :
-    QWidget(parent, Qt::FramelessWindowHint), mModel(model)
+    QWidget(parent, Qt::FramelessWindowHint)
 {
+    mModel = model;
+    mModelOwned = false;
+
     mOffset = 0;
     mHVirtualScreen = 1;
     mVVirtualScreen = 1;
+
+    connectToModel();
+}
+
+ProjDisplay::ProjDisplay(const QString& path, QWidget* parent) :
+    QWidget(parent, Qt::FramelessWindowHint)
+{
+    mModel = new PresModel(path, this);
+    mModelOwned = true;
+
+    mOffset = 0;
+    mHVirtualScreen = 1;
+    mVVirtualScreen = 1;
+
+    connectToModel();
+}
+
+void ProjDisplay::setModel(PresModel* model)
+{
+    if (mModelOwned)
+        delete mModel;
+
+    mModel = model;
+    mModelOwned = false;
+    repaint();
+
+    connectToModel();
+}
+
+void ProjDisplay::setModel(const QString& path)
+{
+    if (mModelOwned)
+        delete mModel;
+
+    mModel = new PresModel(path, this);
+    mModelOwned = true;
+    repaint();
+
+    connectToModel();
+}
+
+void ProjDisplay::connectToModel(void)
+{
+    if (mModel == NULL)
+        return;
+
+    connect(mModel, SIGNAL(documentChanged()),
+            this, SLOT(update()));
+    connect(mModel, SIGNAL(virtualScreenNumberChanged()),
+            this, SLOT(update()));
+    connect(mModel, SIGNAL(currentPageChanged()),
+            this, SLOT(update()));
 }
 
 void ProjDisplay::setHorizontalVirtualScreen(int horizontal)
