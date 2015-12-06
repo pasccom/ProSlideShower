@@ -8,6 +8,12 @@
 #   include <QtGui>
 #endif
 
+SubDisplayHandler::~SubDisplayHandler(void)
+{
+    for (int d = 0; d < size(); d++)
+        delete at(d);
+}
+
 void SubDisplayHandler::setModel(PresModel* model)
 {
     mModel = model;
@@ -15,6 +21,13 @@ void SubDisplayHandler::setModel(PresModel* model)
     for (int d = 0; d < size(); d++)
         if (at(d) != NULL)
             at(d)->setModel(model);
+}
+
+void SubDisplayHandler::load(const QString& file)
+{
+    if (!model()->load(file))
+        return;
+    setModel(model());
 }
 
 void SubDisplayHandler::goToNextPage()
@@ -52,9 +65,7 @@ void SubDisplayHandler::handleLoadFile(void)
         senderDisplay->setModel(fileDialog.selectedFiles().first());
         senderDisplay->model()->setCurrentPageNumber(model()->getCurrentPageNumber());
     } else {
-        if (!model()->load(fileDialog.selectedFiles().first()))
-            return;
-        setModel(model());
+        load(fileDialog.selectedFiles().first());
     }
 
     handleVirtualScreens();

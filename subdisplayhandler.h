@@ -13,6 +13,7 @@ class SubDisplayHandler : public QObject, public QVector<ProjDisplay *>
 public:
     inline SubDisplayHandler(PresModel* model = NULL, QObject* parent = NULL):
         QObject(parent), QVector<ProjDisplay *>(), mModel(model), mParent(NULL) {}
+    virtual ~SubDisplayHandler(void);
 
     inline void setParentWidget(QWidget* widget) {mParent = widget;}
     inline QWidget* parentWidget(void) const {return mParent;}
@@ -23,7 +24,9 @@ public:
     void goToNextPage();
     void goToPrevPage();
 
-    void updateDisplayActions(void);
+    virtual void updateDisplayActions(void);
+public slots:
+    virtual void load(const QString& file);
 private slots:
     void handleLoadFile(void);
     void handleVirtualScreens(void);
