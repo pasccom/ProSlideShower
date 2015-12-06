@@ -2,8 +2,8 @@
 #define PROJCONTROLLER_H
 
 #include <QWidget>
+#include "subdisplayhandler.h"
 #include "presstyle.h"
-#include <QVector>
 #include <QTimer>
 #include <QTime>
 
@@ -20,6 +20,9 @@ public:
     ProjController(PresModel *model, QWidget *parent = NULL);
     ~ProjController(void) {delete mStyle;}
 
+    inline void setModel(PresModel* model) {mDisplays->setModel(model);}
+    inline PresModel* model() const {return mDisplays->model();}
+
     inline void setTimeFormat(const QString& format) {mFormat = format; updateTime();}
     inline QString timeFormat(void) const {return mFormat;}
 
@@ -28,10 +31,14 @@ public:
 signals:
 
 public slots:
+    void goToNextPage() {mDisplays->goToNextPage();}
+    void goToPrevPage() {mDisplays->goToPrevPage();}
+
     void handleDocumentChange(void);
     void handleVirtualScreenNumberChange(void);
     void handleFrameChange(void);
     void handleSlideChange(void);
+
     inline void start(void) {if (!mTimer->isActive()) mTimer->start();}
     inline void pause(void) {if (mTimer->isActive()) mTimer->stop();}
     void stop(void);
@@ -43,14 +50,13 @@ private:
     void updateFrame(void);
     void updateColor(void);
 
-    PresModel* mModel;
+    SubDisplayHandler *mDisplays;
     PresStyle* mStyle;
     QSplitter* mSplitter;
     QLabel* mTimeLabel;
     QLabel* mSlideLabel;
     QProgressBar* mSlideProgress;
     QProgressBar* mTimeProgress;
-    QVector<ProjDisplay*> mDisplays;
 
     QTimer* mTimer;
     QTime mTime;

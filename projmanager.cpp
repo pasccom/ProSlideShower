@@ -112,6 +112,7 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
         if (model() != NULL)
             model()->goToPrevPage();
         goToPrevPage();
+        mController->goToPrevPage();
         break;
     case Qt::Key_Right:
     case Qt::Key_Down:
@@ -120,6 +121,7 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
         if (model() != NULL)
             model()->goToNextPage();
         goToNextPage();
+        mController->goToNextPage();
         break;
     }
 }

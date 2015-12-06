@@ -10,8 +10,10 @@
 #endif
 
 ProjController::ProjController(PresModel *model, QWidget *parent) :
-    QWidget(parent, Qt::FramelessWindowHint), mModel(model)
+    QWidget(parent, Qt::FramelessWindowHint), mDisplays(new SubDisplayHandler(model, parent))
 {
+    mDisplays->setParentWidget(this);
+
     // Presentation timing:
     mTime = QTime(0, 0, 0);
     mFormat = "hh:mm:ss";
@@ -38,14 +40,14 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     // Main display:
     mSplitter = new QSplitter(Qt::Horizontal, this);
 
-    mDisplays.resize(3);
+    mDisplays->resize(3);
 
-    for (int d = 0; d < mDisplays.size(); d++) {
-        mDisplays[d] = new ProjDisplay(model, this);
-        mDisplays[d]->setOffset(d - 1);
-        if (d == 1)
-            mDisplays[d]->setHorizontalVirtualScreen(2);
-        mSplitter->addWidget(mDisplays[d]);
+    for (int d = 0; d < mDisplays->size(); d++) {
+        mDisplays->replace(d, new ProjDisplay(model, this));
+        mDisplays->at(d)->setOffset(d - 1);
+        /*if (d == 1)
+            mDisplays->at(d)->setHorizontalVirtualScreen(2);*/
+        mSplitter->addWidget(mDisplays->at(d));
     }
 
     // Footer:
@@ -82,6 +84,7 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     setLayout(mainLayout);
 
     handleSlideChange();
+    mDisplays->updateDisplayActions();
 }
 
 void ProjController::stop(void)
@@ -97,30 +100,30 @@ void ProjController::stop(void)
 void ProjController::handleDocumentChange(void)
 {
     updateFrame();
-    updateDisplays();
+    //updateDisplays();
 }
 
 void ProjController::handleVirtualScreenNumberChange(void)
 {
-    updateDisplays();
+    //updateDisplays();
 }
 
 void ProjController::handleFrameChange(void)
 {
     updateFrame();
-    updateDisplays();
+    //updateDisplays();
 }
 
 void ProjController::handleSlideChange(void)
 {
     //updateSlide();
-    updateDisplays();
+    //updateDisplays();
 }
 
 void ProjController::updateDisplays(void)
 {
-    for (int d = 0; d < mDisplays.size(); d++)
-        mDisplays[d]->repaint();
+    for (int d = 0; d < mDisplays->size(); d++)
+        mDisplays->at(d)->repaint();
 }
 
 
@@ -137,10 +140,10 @@ void ProjController::updateTime(void)
 
 void ProjController::updateFrame(void)
 {
-    mSlideProgress->setRange(1, mModel->getFrameCount());
-    mSlideProgress->setValue(mModel->getCurrentFrameNumber());
+    mSlideProgress->setRange(1, mDisplays->model()->getFrameCount());
+    mSlideProgress->setValue(mDisplays->model()->getCurrentFrameNumber());
 
-    mSlideLabel->setText(QString("%1/%2").arg(mModel->getCurrentFrameNumber()).arg(mModel->getFrameCount()));
+    mSlideLabel->setText(QString("%1/%2").arg(mDisplays->model()->getCurrentFrameNumber()).arg(mDisplays->model()->getFrameCount()));
 
     updateColor();
 }
