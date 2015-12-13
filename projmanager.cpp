@@ -98,7 +98,8 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
     case Qt::Key_PageUp:
         ke->accept();
         if (model() != NULL)
-            model()->goToPrevPage();
+            if (!model()->goToPrevPage())
+                break;
         goToPrevPage();
         mController->goToPrevPage();
         break;
@@ -107,7 +108,8 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
     case Qt::Key_PageDown:
         ke->accept();
         if (model() != NULL)
-            model()->goToNextPage();
+            if (!model()->goToNextPage())
+                break;
         goToNextPage();
         mController->goToNextPage();
         break;
