@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "subdisplayhandler.h"
 #include "presstyle.h"
+#include "projcontrollerpane.h"
 #include <QTimer>
 #include <QTime>
 
@@ -40,6 +41,9 @@ public slots:
     inline void start(void) {if (!mTimer->isActive()) mTimer->start();}
     inline void pause(void) {if (mTimer->isActive()) mTimer->stop();}
     void stop(void);
+
+    void showControlPane(void) {mPane->show();}
+    void hideControlPane(void) {mPane->hide();}
 private slots:
     inline void handleSecondStep(void) {mTime = mTime.addSecs(1); updateTime();}
 private:
@@ -51,6 +55,7 @@ private:
     SubDisplayHandler *mDisplays;
     PresStyle* mStyle;
     QSplitter* mSplitter;
+    ProjControllerPane* mPane;
     QLabel* mTimeLabel;
     QLabel* mSlideLabel;
     QProgressBar* mSlideProgress;

@@ -1,4 +1,5 @@
 #include "projcontroller.h"
+#include "projcontrollerpane.h"
 #include "presmodel.h"
 #include "presstyle.h"
 #include "projdisplay.h"
@@ -28,6 +29,8 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     QPalette widgetPalette = palette();
     widgetPalette.setColor(QPalette::Window, Qt::black);
     widgetPalette.setColor(QPalette::WindowText, Qt::white);
+    widgetPalette.setColor(QPalette::Button, QColor(32, 32, 32));
+    widgetPalette.setColor(QPalette::ButtonText, Qt::white);
     widgetPalette.setColor(QPalette::NoRole, Qt::white);
     setPalette(widgetPalette);
 
@@ -44,6 +47,10 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
         mDisplays->at(d)->setOffset(d - 1);
         mSplitter->addWidget(mDisplays->at(d));
     }
+
+    // Header:
+    mPane = new ProjControllerPane(this);
+    mPane->hide();
 
     // Footer:
     mTimeLabel = new QLabel("00:00:00", this);
@@ -73,6 +80,7 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
 
     QBoxLayout* mainLayout = new QVBoxLayout;
     mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->addWidget(mPane);
     mainLayout->addWidget(mSplitter, 1);
     mainLayout->addLayout(bottomLayout);
 
