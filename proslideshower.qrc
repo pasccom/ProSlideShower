@@ -2,5 +2,6 @@
     <qresource prefix="/icons">
         <file alias="configure.png">icons/configure.png</file>
         <file alias="open.png">icons/open.png</file>
+        <file alias="close.png">icons/close.png</file>
     </qresource>
 </RCC>
