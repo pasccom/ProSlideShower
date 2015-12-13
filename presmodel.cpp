@@ -76,7 +76,7 @@ void PresModel::setVirtualScreens(int horizontal, int vertical)
 
 bool PresModel::setCurrentPageNumber(int page)
 {
-    if ((page < 0) || (page >= mDoc->numPages()))
+    if ((mDoc == NULL) || (page < 0) || (page >= mDoc->numPages()))
         return false;
 
     int oldFrame = getCurrentFrameNumber();
