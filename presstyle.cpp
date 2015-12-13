@@ -24,6 +24,9 @@ void PresStyle::drawControl(ControlElement element, const QStyleOption* option, 
     if (element == CE_ProgressBarContents) {
         const QStyleOptionProgressBar* opt = qstyleoption_cast<const QStyleOptionProgressBar *>(option);
 
+        if ((opt->progress < opt->minimum) || (opt->progress > opt->maximum) || (opt->minimum == opt->maximum))
+            return;
+
         QImage buffer(opt->rect.width() - 4, 12, QImage::Format_ARGB32_Premultiplied);
         buffer.fill(QColor(0, 0, 0, 0));
 
