@@ -5,6 +5,7 @@
 
 class ProjController;
 class QKeyEvent;
+class QMouseEvent;
 
 class ProjManager : public SubDisplayHandler
 {
@@ -19,6 +20,7 @@ public slots:
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
     void keyReleaseEvent(QKeyEvent* ke);
+    void mouseMoveEvent(QMouseEvent *me);
 private:
 
     ProjController* mController;

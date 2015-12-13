@@ -72,12 +72,17 @@ void ProjManager::load(const QString& file)
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)
 {
     switch(event->type()) {
+    case QEvent::MouseMove:
+        //qDebug() << "Mouse move event" << watched->metaObject()->className();
+        mouseMoveEvent(static_cast<QMouseEvent *>(event));
+        return event->isAccepted();
     case QEvent::KeyRelease:
         keyReleaseEvent(static_cast<QKeyEvent *>(event));
         return event->isAccepted();
     case QEvent::Close:
-        qDebug() << watched->metaObject()->className();
-        if (qobject_cast<QMenu *>(watched) != NULL)
+        qDebug() << "Close event" << watched->metaObject()->className();
+        if ((qobject_cast<ProjDisplay *>(watched) == NULL)
+         && (qobject_cast<ProjController *>(watched) == NULL))
             return false;
         qApp->quit();
         return true;
@@ -91,27 +96,59 @@ bool ProjManager::eventFilter(QObject* watched, QEvent* event)
 void ProjManager::keyReleaseEvent(QKeyEvent *ke)
 {
     //qDebug() << "key release event" << ke->key() << ke->modifiers();
+    ke->ignore();
 
     switch (ke->key()) {
     case Qt::Key_Left:
     case Qt::Key_Up:
     case Qt::Key_PageUp:
-        ke->accept();
         if (model() != NULL)
             if (!model()->goToPrevPage())
                 break;
+        ke->accept();
         goToPrevPage();
         mController->goToPrevPage();
         break;
     case Qt::Key_Right:
     case Qt::Key_Down:
     case Qt::Key_PageDown:
-        ke->accept();
         if (model() != NULL)
             if (!model()->goToNextPage())
                 break;
+        ke->accept();
         goToNextPage();
         mController->goToNextPage();
         break;
     }
+}
+
+void ProjManager::mouseMoveEvent(QMouseEvent *me)
+{
+#ifndef SIMULATING_DESKTOPS
+    QDesktopWidget* desktop = qApp->desktop();
+#else
+    DesktopSimulatorWidget *desktop = new DesktopSimulatorWidget(SIMULATING_H_DESKTOPS, SIMULATING_V_DESKTOPS);
+#endif
+
+    QRect showRect(desktop->screenGeometry(desktop->primaryScreen()).topLeft(),
+                   QPoint(desktop->screenGeometry(desktop->primaryScreen()).right(),
+                          desktop->screenGeometry(desktop->primaryScreen()).top() + 1));
+    QRect hideRect(QPoint(desktop->screenGeometry(desktop->primaryScreen()).left(),
+                          desktop->screenGeometry(desktop->primaryScreen()).top() + 100),
+                   desktop->screenGeometry(desktop->primaryScreen()).bottomRight());
+
+    /*qDebug() << showRect << me->globalPos() << showRect.contains(me->globalPos());
+    qDebug() << hideRect << me->globalPos() << hideRect.contains(me->globalPos());*/
+
+    me->ignore();
+    if (showRect.contains(me->globalPos())) {
+        mController->showControlPane();
+        me->accept();
+    }
+    if (hideRect.contains(me->globalPos()))
+        mController->hideControlPane();
+
+#ifdef SIMULATING_DESKTOPS
+    delete desktop;
+#endif
 }
