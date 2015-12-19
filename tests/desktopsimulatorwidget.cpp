@@ -35,6 +35,8 @@ int DesktopSimulatorWidget::primaryScreen(void) const
 
 int DesktopSimulatorWidget::screenCount(void) const
 {
+    if ((mHDesktops == 0) && (mVDesktops == 0))
+        return 1;
     if ((mHDesktops == 0) || (mVDesktops == 0))
         return mDesktop->screenCount();
     qDebug() << mAuxScreenRect << mDesktop->screenGeometry(mDesktop->primaryScreen())
