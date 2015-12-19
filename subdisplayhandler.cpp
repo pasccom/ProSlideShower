@@ -23,11 +23,16 @@ void SubDisplayHandler::setModel(PresModel* model)
             at(d)->setModel(model);
 }
 
-void SubDisplayHandler::load(const QString& file)
+void SubDisplayHandler::load(const QString& file, int h, int v)
 {
     if (!model()->load(file))
         return;
     setModel(model());
+
+    if (h <= 0)
+        handleVirtualScreens();
+    else
+        model()->setVirtualScreens(h, v);
 }
 
 void SubDisplayHandler::goToNextPage()
@@ -64,11 +69,10 @@ void SubDisplayHandler::handleLoadFile(void)
     if (senderDisplay != NULL) {
         senderDisplay->setModel(fileDialog.selectedFiles().first());
         senderDisplay->model()->setCurrentPageNumber(model()->getCurrentPageNumber());
+        handleVirtualScreens();
     } else {
         load(fileDialog.selectedFiles().first());
     }
-
-    handleVirtualScreens();
 }
 
 void SubDisplayHandler::handleVirtualScreens(void)

@@ -52,6 +52,9 @@ ProjManager::ProjManager(QObject *parent) :
 
     updateDisplayActions();
 
+    connect(mController, SIGNAL(documentOpened(const QString&)),
+            this, SLOT(load(const QString&)));
+
 #ifdef SIMULATING_DESKTOPS
     delete desktop;
 #endif
@@ -63,9 +66,9 @@ ProjManager::~ProjManager(void)
 }
 
 
-void ProjManager::load(const QString& file)
+void ProjManager::load(const QString& file, int h, int v)
 {
-    SubDisplayHandler::load(file);
+    SubDisplayHandler::load(file, h, v);
     mController->setModel(model());
 }
 

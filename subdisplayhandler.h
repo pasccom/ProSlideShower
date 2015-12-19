@@ -26,7 +26,7 @@ public:
 
     virtual void updateDisplayActions(void);
 public slots:
-    virtual void load(const QString& file);
+    virtual void load(const QString& file, int h = 0, int v = 1);
 private slots:
     void handleLoadFile(void);
     void handleVirtualScreens(void);

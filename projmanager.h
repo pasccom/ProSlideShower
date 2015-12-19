@@ -16,7 +16,7 @@ public:
 signals:
 
 public slots:
-    void load(const QString& file);
+    void load(const QString& file, int h = 0, int v = 1);
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
     void keyReleaseEvent(QKeyEvent* ke);
