@@ -14,7 +14,8 @@ SOURCES += \
     presstyle.cpp \
     tests/desktopsimulatorwidget.cpp \
     subdisplayhandler.cpp \
-    projcontrollerpane.cpp
+    projcontrollerpane.cpp \
+    galleryview.cpp
 
 HEADERS += \
     projdisplay.h \
@@ -24,7 +25,9 @@ HEADERS += \
     presstyle.h \
     tests/desktopsimulatorwidget.h \
     subdisplayhandler.h \
-    projcontrollerpane.h
+    projcontrollerpane.h \
+    galleryview.h \
+    previewmodel.h
 
 SIMULATING_DESKTOPS=yes
 H_DESKTOPS=2
