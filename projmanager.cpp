@@ -28,6 +28,7 @@ ProjManager::ProjManager(QObject *parent) :
     mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
     mController->show();
     mController->setTotalTime(QTime(0, 45, 0));
+    mController->setPaneHeight(200);
 
     setParentWidget(mController);
 
@@ -137,7 +138,7 @@ void ProjManager::mouseMoveEvent(QMouseEvent *me)
                    QPoint(desktop->screenGeometry(desktop->primaryScreen()).right(),
                           desktop->screenGeometry(desktop->primaryScreen()).top() + 1));
     QRect hideRect(QPoint(desktop->screenGeometry(desktop->primaryScreen()).left(),
-                          desktop->screenGeometry(desktop->primaryScreen()).top() + 100),
+                          desktop->screenGeometry(desktop->primaryScreen()).top() + mController->paneHeight()),
                    desktop->screenGeometry(desktop->primaryScreen()).bottomRight());
 
     /*qDebug() << showRect << me->globalPos() << showRect.contains(me->globalPos());
