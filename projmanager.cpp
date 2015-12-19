@@ -150,9 +150,9 @@ void ProjManager::mouseMoveEvent(QMouseEvent *me)
     QRect showRect(desktop->screenGeometry(desktop->primaryScreen()).topLeft(),
                    QPoint(desktop->screenGeometry(desktop->primaryScreen()).right(),
                           desktop->screenGeometry(desktop->primaryScreen()).top() + 1));
-    QRect hideRect(QPoint(desktop->screenGeometry(desktop->primaryScreen()).left(),
-                          desktop->screenGeometry(desktop->primaryScreen()).top() + mController->paneHeight()),
-                   desktop->screenGeometry(desktop->primaryScreen()).bottomRight());
+    QRect hideRect(desktop->screenGeometry(desktop->primaryScreen()).topLeft(),
+                   QPoint(desktop->screenGeometry(desktop->primaryScreen()).right(),
+                          desktop->screenGeometry(desktop->primaryScreen()).top() + mController->paneHeight()));
 
     /*qDebug() << showRect << me->globalPos() << showRect.contains(me->globalPos());
     qDebug() << hideRect << me->globalPos() << hideRect.contains(me->globalPos());*/
@@ -161,7 +161,7 @@ void ProjManager::mouseMoveEvent(QMouseEvent *me)
         mController->showControlPane();
         me->accept();
     }
-    if (hideRect.contains(me->globalPos()))
+    if (!hideRect.contains(me->globalPos()) && (me->buttons() == Qt::NoButton))
         mController->hideControlPane();
 
 #ifdef SIMULATING_DESKTOPS
