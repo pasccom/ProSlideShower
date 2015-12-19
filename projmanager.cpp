@@ -24,17 +24,21 @@ ProjManager::ProjManager(QObject *parent) :
 
     setModel(new PresModel(QString::null, this));
 
-    mController = new ProjController(model(), NULL);
-    mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
-    mController->show();
-    mController->setTotalTime(QTime(0, 45, 0));
-    mController->setPaneHeight(200);
+    if (desktop->screenCount() > 1) {
+        mController = new ProjController(model(), NULL);
+        mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
+        mController->show();
+        mController->setTotalTime(QTime(0, 45, 0));
+        mController->setPaneHeight(200);
 
-    setParentWidget(mController);
+        setParentWidget(mController);
 
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), mController, SLOT(start()), 0, Qt::ApplicationShortcut);
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), mController, SLOT(pause()), 0, Qt::ApplicationShortcut);
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_X), mController, SLOT(stop()), 0, Qt::ApplicationShortcut);
+        new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), mController, SLOT(start()), 0, Qt::ApplicationShortcut);
+        new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), mController, SLOT(pause()), 0, Qt::ApplicationShortcut);
+        new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_X), mController, SLOT(stop()), 0, Qt::ApplicationShortcut);
+    } else {
+        mController == NULL;
+    }
 
     resize(desktop->screenCount());
 
@@ -42,7 +46,7 @@ ProjManager::ProjManager(QObject *parent) :
     bool first = true;
     for (int d = 0; d < size(); d++) {
         qDebug() << desktop->screenGeometry(d);
-        if (first && (d != desktop->primaryScreen())) {
+        if ((desktop->screenCount() == 1) || (first && (d != desktop->primaryScreen()))) {
             replace(d, new ProjDisplay(model(), NULL));
             at(d)->setGeometry(desktop->screenGeometry(d));
             at(d)->show();
@@ -53,8 +57,9 @@ ProjManager::ProjManager(QObject *parent) :
 
     updateDisplayActions();
 
-    connect(mController, SIGNAL(documentOpened(const QString&)),
-            this, SLOT(load(const QString&)));
+    if (mController != NULL)
+        connect(mController, SIGNAL(documentOpened(const QString&)),
+                this, SLOT(load(const QString&)));
 
 #ifdef SIMULATING_DESKTOPS
     delete desktop;
@@ -63,14 +68,16 @@ ProjManager::ProjManager(QObject *parent) :
 
 ProjManager::~ProjManager(void)
 {
-    delete mController;
+    if (mController != NULL)
+        delete mController;
 }
 
 
 void ProjManager::load(const QString& file, int h, int v)
 {
     SubDisplayHandler::load(file, h, v);
-    mController->setModel(model());
+    if (mController != NULL)
+        mController->setModel(model());
 }
 
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)
@@ -111,7 +118,8 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
                 break;
         ke->accept();
         goToPrevPage();
-        mController->goToPrevPage();
+        if (mController != NULL)
+            mController->goToPrevPage();
         break;
     case Qt::Key_Right:
     case Qt::Key_Down:
@@ -121,7 +129,8 @@ void ProjManager::keyReleaseEvent(QKeyEvent *ke)
                 break;
         ke->accept();
         goToNextPage();
-        mController->goToNextPage();
+        if (mController != NULL)
+            mController->goToNextPage();
         break;
     }
 }
@@ -134,6 +143,10 @@ void ProjManager::mouseMoveEvent(QMouseEvent *me)
     DesktopSimulatorWidget *desktop = new DesktopSimulatorWidget(SIMULATING_H_DESKTOPS, SIMULATING_V_DESKTOPS);
 #endif
 
+    me->ignore();
+    if (mController == NULL)
+        return;
+
     QRect showRect(desktop->screenGeometry(desktop->primaryScreen()).topLeft(),
                    QPoint(desktop->screenGeometry(desktop->primaryScreen()).right(),
                           desktop->screenGeometry(desktop->primaryScreen()).top() + 1));
@@ -144,7 +157,6 @@ void ProjManager::mouseMoveEvent(QMouseEvent *me)
     /*qDebug() << showRect << me->globalPos() << showRect.contains(me->globalPos());
     qDebug() << hideRect << me->globalPos() << hideRect.contains(me->globalPos());*/
 
-    me->ignore();
     if (showRect.contains(me->globalPos())) {
         mController->showControlPane();
         me->accept();
