@@ -30,7 +30,7 @@ public:
     inline void setTotalTime(const QTime& length) {mTotalTime = length; updateTime();}
     inline QTime totalTime(void) const {return mTotalTime;}
 signals:
-
+    void documentOpened(const QString& file);
 public slots:
     void goToNextPage() {mDisplays->goToNextPage();}
     void goToPrevPage() {mDisplays->goToPrevPage();}
@@ -46,6 +46,7 @@ public slots:
     void hideControlPane(void) {mPane->hide();}
 private slots:
     inline void handleSecondStep(void) {mTime = mTime.addSecs(1); updateTime();}
+    void handleLoadFile(void);
 private:
     void updateDisplays(void);
     void updateTime(void);

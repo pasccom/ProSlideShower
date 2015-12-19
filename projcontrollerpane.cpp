@@ -47,6 +47,8 @@ ProjControllerPane::ProjControllerPane(QWidget *parent) :
 
    connect(mCloseButton, SIGNAL(clicked(bool)),
            qApp, SLOT(quit()));
+   connect(mOpenButton, SIGNAL(clicked(bool)),
+           this, SIGNAL(openDocumentRequest()));
 }
 
 bool ProjControllerPane::eventFilter(QObject* watched, QEvent* event)

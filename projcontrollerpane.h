@@ -11,6 +11,8 @@ class ProjControllerPane : public QWidget
     Q_OBJECT
 public:
     ProjControllerPane(QWidget* parent = NULL);
+signals:
+    void openDocumentRequest(void);
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
 private:
