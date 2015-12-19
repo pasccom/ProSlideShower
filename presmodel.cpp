@@ -12,7 +12,7 @@
 #include <QtDebug>
 
 PresModel::PresModel(const QString &file, QObject *parent)
-    : QObject(parent), mDoc(NULL), mCurrentPage(0), mHVirtualScreens(1), mVVirtualScreens(1)
+    : PreviewModel(parent), mDoc(NULL), mCurrentPage(0), mHVirtualScreens(1), mVVirtualScreens(1)
 {
     mFramePages.clear();
     mTotalFrames = 0;
@@ -29,6 +29,8 @@ PresModel::~PresModel(void)
 
 bool PresModel::load(const QString& file)
 {
+    beginResetModel();
+
     if (mDoc != NULL)
         delete mDoc;
     mDoc = NULL;
@@ -61,6 +63,7 @@ bool PresModel::load(const QString& file)
 
     mCurrentPage = 0;
     emit documentChanged();
+    endResetModel();
     return true;
 }
 
@@ -94,6 +97,38 @@ int PresModel::getCurrentFrameNumber(void) const
     if (mCurrentPage >= mFramePages.size())
         return getCurrentPageNumber() + 1;
     return mFramePages.at(mCurrentPage);
+}
+
+QVariant PresModel::data(const QModelIndex& index, int role) const
+{
+    if (mDoc == NULL)
+        return QVariant();
+
+    Poppler::Page* page = mDoc->page(index.row());
+    if (page == NULL)
+        return QVariant();
+
+    if ((role != PreviewRole) && (role != Qt::DisplayRole) && (role != Qt::SizeHintRole))
+        return QVariant();
+
+    int horizontalVirtualScreen = 1;
+    int verticalVirtualScreen = 1;
+
+    double aspectRatio = 1.;
+    if (mConstraintOrientation == Qt::Horizontal)
+        aspectRatio = mConstraintDim * mHVirtualScreens / page->pageSizeF().width();
+    if (mConstraintOrientation == Qt::Vertical)
+        aspectRatio = mConstraintDim * mVVirtualScreens / page->pageSizeF().height();
+    double pageWidth = page->pageSizeF().width()*aspectRatio;
+    double pageHeight = page->pageSizeF().height()*aspectRatio;
+
+    if (role == Qt::SizeHintRole)
+        return QVariant(QSize(pageWidth, pageHeight));
+    return QVariant::fromValue<QImage>(page->renderToImage(72.*aspectRatio, 72.*aspectRatio,
+                                                           (horizontalVirtualScreen - 1) * pageWidth / mHVirtualScreens,
+                                                           (verticalVirtualScreen - 1) * pageHeight / mVVirtualScreens,
+                                                           pageWidth / mHVirtualScreens, pageHeight/mVVirtualScreens));
+
 }
 
 QImage PresModel::getPage(int number, const QRect& boundingRect, int horizontalVirtualScreen, int verticalVirtualScreen) const

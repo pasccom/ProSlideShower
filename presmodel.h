@@ -1,7 +1,7 @@
 #ifndef PRESMODEL_H
 #define PRESMODEL_H
 
-#include <QObject>
+#include "previewmodel.h"
 #include <QImage>
 #include <QList>
 
@@ -9,13 +9,12 @@ namespace Poppler {
     class Document;
 }
 
-class PresModel :public QObject
+class PresModel : public PreviewModel
 {
     Q_OBJECT
 public:
     PresModel(const QString& file, QObject* parent = NULL);
     ~PresModel(void);
-    bool load(const QString& file);
     inline bool isOK(void) const {return (mDoc != NULL);}
 
     inline int getCurrentPageNumber(void) const {return mCurrentPage;}
@@ -32,7 +31,11 @@ public:
     inline QImage getCurrentPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1, int offset = 0) const {return getPage(mCurrentPage + offset, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
     inline QImage getNextPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage + 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
     inline QImage getPrevPage(const QRect& boundingRect, int horizontalVirtualScreen = 1, int verticalVirtualScreen = 1) const {return getPage(mCurrentPage - 1, boundingRect, horizontalVirtualScreen, verticalVirtualScreen);}
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const {return !parent.isValid() ? getPageCount() : 0;}
+    QVariant data(const QModelIndex& index, int role = PreviewRole) const;
 public slots:
+    bool load(const QString& file);
     bool setCurrentPageNumber(int page);
     inline bool goToNextPage(void) {return setCurrentPageNumber(mCurrentPage + 1);}
     inline bool goToPrevPage(void) {return setCurrentPageNumber(mCurrentPage - 1);}
