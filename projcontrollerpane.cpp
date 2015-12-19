@@ -1,4 +1,5 @@
 #include "projcontrollerpane.h"
+#include "galleryview.h"
 
 #if QT_VERSION > 0x050000
 #   include <QtWidgets>
@@ -9,7 +10,12 @@
 ProjControllerPane::ProjControllerPane(QWidget *parent) :
     QWidget(parent)
 {
-   mSlidesView = new QListWidget(this);
+   mSlidesView = new GalleryView(Qt::Horizontal, this);
+   mSlidesView->setTopMargin(1, 2);
+   mSlidesView->setBottomMargin(1, 2);
+   mSlidesView->setLeftMargin(5);
+   mSlidesView->setRightMargin(5);
+   mSlidesView->setSpacing(5);
 
    mOpenButton = new QToolButton(this);
    mOpenButton->setIcon(QIcon(":/icons/open.png"));

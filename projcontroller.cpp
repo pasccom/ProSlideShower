@@ -29,6 +29,7 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     QPalette widgetPalette = palette();
     widgetPalette.setColor(QPalette::Window, Qt::black);
     widgetPalette.setColor(QPalette::WindowText, Qt::white);
+    widgetPalette.setColor(QPalette::Base, QColor(32, 32, 32));
     widgetPalette.setColor(QPalette::Button, QColor(32, 32, 32));
     widgetPalette.setColor(QPalette::ButtonText, Qt::white);
     widgetPalette.setColor(QPalette::NoRole, Qt::white);
@@ -50,6 +51,7 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
 
     // Header:
     mPane = new ProjControllerPane(this);
+    mPane->setModel(model);
     mPane->hide();
 
     // Footer:
