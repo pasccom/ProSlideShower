@@ -108,20 +108,7 @@ void ProjDisplay::paintEvent(QPaintEvent *pe)
     if (mModel == NULL)
         return;
 
-    QImage pageImg;
-    switch(mOffset) {
-    case 0:
-        pageImg = mModel->getCurrentPage(rect(), mHVirtualScreen, mVVirtualScreen);
-        break;
-    case 1:
-        pageImg = mModel->getNextPage(rect(), mHVirtualScreen, mVVirtualScreen);
-        break;
-    case -1:
-        pageImg = mModel->getPrevPage(rect(), mHVirtualScreen, mVVirtualScreen);
-        break;
-    default:
-        Q_ASSERT(false);
-    }
+    QImage pageImg = mModel->getCurrentPage(rect(), mHVirtualScreen, mVVirtualScreen, mOffset);
 
     QRectF imgRect((rect().width() - pageImg.width()) / 2., (rect().height() - pageImg.height()) / 2., pageImg.width(), pageImg.height());
     p.drawImage(imgRect, pageImg);

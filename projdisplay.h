@@ -16,7 +16,7 @@ public:
     void setModel(const QString& path);
     inline PresModel* model(void) const {return mModel;}
 
-    inline void setOffset(int offset) {Q_ASSERT((offset >= -1) && (offset <= 1)); mOffset = offset;}
+    inline void setOffset(int offset) {mOffset = offset;}
     inline int offset(void) const {return mOffset;}
 
     inline int horizontalVirtualScreen(void) const {return mHVirtualScreen;}
