@@ -30,6 +30,7 @@ public slots:
 private slots:
     void handleLoadFile(void);
     void handleVirtualScreens(void);
+    void handleOffset(void);
 private:
     void updateDisplayActions(ProjDisplay* display);
 
