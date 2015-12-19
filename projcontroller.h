@@ -29,6 +29,9 @@ public:
 
     inline void setTotalTime(const QTime& length) {mTotalTime = length; updateTime();}
     inline QTime totalTime(void) const {return mTotalTime;}
+
+    inline void setPaneHeight(int height) {mPane->setFixedHeight(height);}
+    inline int paneHeight(void) const {return mPane->height();}
 signals:
     void documentOpened(const QString& file);
 public slots:
