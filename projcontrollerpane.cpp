@@ -74,10 +74,14 @@ void ProjControllerPane::setModel(PresModel *model)
     }
 
     mSlidesView->setModel(model);
+    mSlidesView->setCurrentIndex(model->getCurentIndex());
+    mSlidesView->center(model->getCurentIndex());
 
     connect(mSlidesView, SIGNAL(doubleClicked(const QModelIndex&)),
             model, SLOT(setCurrentPage(const QModelIndex&)));
     connect(model, SIGNAL(currentPageChanged()),
+            this, SLOT(handlePageChange()));
+    connect(model, SIGNAL(modelReset()),
             this, SLOT(handlePageChange()));
 }
 
@@ -85,10 +89,10 @@ void ProjControllerPane::handlePageChange(void)
 {
     PresModel *presModel = qobject_cast<PresModel *>(mSlidesView->model());
 
-    qDebug() << presModel->getCurentIndex();
-
-    if (presModel != NULL)
+    if (presModel != NULL) {
+        mSlidesView->setCurrentIndex(presModel->getCurentIndex());
         mSlidesView->center(presModel->getCurentIndex());
+    }
 }
 
 bool ProjControllerPane::eventFilter(QObject* watched, QEvent* event)
