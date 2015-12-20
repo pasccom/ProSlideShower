@@ -5,6 +5,7 @@
 #include "galleryview.h"
 
 class QToolButton;
+class PresModel;
 
 class ProjControllerPane : public QWidget
 {
@@ -12,12 +13,14 @@ class ProjControllerPane : public QWidget
 public:
     ProjControllerPane(QWidget* parent = NULL);
 
-    inline void setModel(PreviewModel *model) {mSlidesView->setModel(model);}
+    void setModel(PresModel *model);
     inline QAbstractItemModel* model(void) const {return mSlidesView->model();}
 signals:
     void openDocumentRequest(void);
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
+private slots:
+    void handlePageChange(void);
 private:
     GalleryView* mSlidesView;
     QToolButton* mOpenButton;

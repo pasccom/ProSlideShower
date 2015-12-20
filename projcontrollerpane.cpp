@@ -1,4 +1,5 @@
 #include "projcontrollerpane.h"
+#include "presmodel.h"
 #include "galleryview.h"
 
 #if QT_VERSION > 0x050000
@@ -11,11 +12,16 @@ ProjControllerPane::ProjControllerPane(QWidget *parent) :
     QWidget(parent)
 {
    mSlidesView = new GalleryView(Qt::Horizontal, this);
+   mSlidesView->setTopPadding(1, 2);
+   mSlidesView->setBottomPadding(1, 2);
+   mSlidesView->setLeftPadding(1, 2);
+   mSlidesView->setRightPadding(1, 2);
    mSlidesView->setTopMargin(1, 2);
    mSlidesView->setBottomMargin(1, 2);
    mSlidesView->setLeftMargin(5);
    mSlidesView->setRightMargin(5);
    mSlidesView->setSpacing(5);
+   mSlidesView->setSelectionMode(QAbstractItemView::SingleSelection);
 
    mOpenButton = new QToolButton(this);
    mOpenButton->setIcon(QIcon(":/icons/open.png"));
@@ -55,6 +61,34 @@ ProjControllerPane::ProjControllerPane(QWidget *parent) :
            qApp, SLOT(quit()));
    connect(mOpenButton, SIGNAL(clicked(bool)),
            this, SIGNAL(openDocumentRequest()));
+}
+
+
+void ProjControllerPane::setModel(PresModel *model)
+{
+    if (mSlidesView->model() != NULL) {
+        connect(mSlidesView, SIGNAL(doubleClicked(const QModelIndex&)),
+                mSlidesView->model(), SLOT(setCurrentPage(const QModelIndex&)));
+        connect(mSlidesView->model(), SIGNAL(currentPageChanged()),
+                this, SIGNAL(handlePageChange()));
+    }
+
+    mSlidesView->setModel(model);
+
+    connect(mSlidesView, SIGNAL(doubleClicked(const QModelIndex&)),
+            model, SLOT(setCurrentPage(const QModelIndex&)));
+    connect(model, SIGNAL(currentPageChanged()),
+            this, SLOT(handlePageChange()));
+}
+
+void ProjControllerPane::handlePageChange(void)
+{
+    PresModel *presModel = qobject_cast<PresModel *>(mSlidesView->model());
+
+    qDebug() << presModel->getCurentIndex();
+
+    if (presModel != NULL)
+        mSlidesView->center(presModel->getCurentIndex());
 }
 
 bool ProjControllerPane::eventFilter(QObject* watched, QEvent* event)
