@@ -123,7 +123,7 @@ QVariant PresModel::data(const QModelIndex& index, int role) const
     double pageHeight = page->pageSizeF().height()*aspectRatio;
 
     if (role == Qt::SizeHintRole)
-        return QVariant(QSize(pageWidth, pageHeight));
+        return QVariant(page->pageSize());
     return QVariant::fromValue<QImage>(page->renderToImage(72.*aspectRatio, 72.*aspectRatio,
                                                            (horizontalVirtualScreen - 1) * pageWidth / mHVirtualScreens,
                                                            (verticalVirtualScreen - 1) * pageHeight / mVVirtualScreens,
