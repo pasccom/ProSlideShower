@@ -87,6 +87,9 @@ bool ProjManager::eventFilter(QObject* watched, QEvent* event)
         //qDebug() << "Mouse move event" << watched->metaObject()->className();
         mouseMoveEvent(static_cast<QMouseEvent *>(event));
         return event->isAccepted();
+    case QEvent::KeyPress:
+        keyPressEvent(static_cast<QKeyEvent *>(event));
+        return event->isAccepted();
     case QEvent::KeyRelease:
         keyReleaseEvent(static_cast<QKeyEvent *>(event));
         return event->isAccepted();
@@ -102,6 +105,24 @@ bool ProjManager::eventFilter(QObject* watched, QEvent* event)
     }
 
     return false;
+}
+
+void ProjManager::keyPressEvent(QKeyEvent *ke)
+{
+    ke->ignore();
+
+    switch (ke->key()) {
+    case Qt::Key_Left:
+    case Qt::Key_Up:
+    case Qt::Key_PageUp:
+        ke->accept();
+        break;
+    case Qt::Key_Right:
+    case Qt::Key_Down:
+    case Qt::Key_PageDown:
+        ke->accept();
+        break;
+    }
 }
 
 void ProjManager::keyReleaseEvent(QKeyEvent *ke)

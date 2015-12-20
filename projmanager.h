@@ -19,6 +19,7 @@ public slots:
     void load(const QString& file, int h = 0, int v = 1);
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
+    void keyPressEvent(QKeyEvent *ke);
     void keyReleaseEvent(QKeyEvent* ke);
     void mouseMoveEvent(QMouseEvent *me);
 private:
