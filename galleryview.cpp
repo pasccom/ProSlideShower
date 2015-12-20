@@ -269,6 +269,9 @@ void GalleryView::ensureTotallyVisible(const QModelIndex &index, bool includePad
         lastOffset = 0;
     }
 
+    qDebug() << "ensureTotallyVisible" << indexPixelMin << indexPixelMax << firstOffset << lastOffset;
+    qDebug() << ((int) indexPixelMin + indexPixelMax - alongDimension(maximumViewportSize())) / 2;
+
     /*
      * Six cases:
      *  1.2.3. Use hint.
@@ -281,13 +284,10 @@ void GalleryView::ensureTotallyVisible(const QModelIndex &index, bool includePad
     else if (hint == QAbstractItemView::PositionAtBottom)
         alongScrollBar()->setValue(indexPixelMax + lastOffset - alongDimension(maximumViewportSize()));
     else if (hint == QAbstractItemView::PositionAtCenter)
-        alongScrollBar()->setValue(qMax((unsigned int) 0,
-                                         qMin((unsigned int) alongScrollBar()->maximum(),
-                                              (indexPixelMin + indexPixelMax
-                                              - alongDimension(maximumViewportSize())) / 2)));
+        alongScrollBar()->setValue(qMax(0, qMin(alongScrollBar()->maximum(),
+                                                ((int) (indexPixelMin + indexPixelMax) - alongDimension(maximumViewportSize())) / 2)));
     else if (indexPixelMax - indexPixelMin > (unsigned int) alongDimension(maximumViewportSize()))
-            alongScrollBar()->setValue(
-                    (indexPixelMin + indexPixelMax - alongDimension(maximumViewportSize())) / 2);
+        alongScrollBar()->setValue((indexPixelMin + indexPixelMax - alongDimension(maximumViewportSize())) / 2);
     else if (getPosition() > indexPixelMin)
         alongScrollBar()->setValue(indexPixelMin - firstOffset);
     else if (getPosition() + alongDimension(maximumViewportSize()) < indexPixelMax)
@@ -656,9 +656,6 @@ void GalleryView::paintEvent(QPaintEvent *pe)
 
         currentAlong+=(secondAlongPadding() + mSpacing + firstAlongPadding());
     }
-
-    qDebug() << currentAlong << (n - 1)*(secondAlongPadding() + mSpacing + firstAlongPadding()) + firstAlongMargin() + firstAlongPadding()
-             << currentAlong.toPixels(cConstraint) + mAspectRatioList.at(0)*cConstraint << computeTotal(cConstraint);
 
     // TODO To be deleted:
     /*for(int i = 0; i < mModel->rowCount(); i++)
