@@ -32,6 +32,8 @@ GalleryView::GalleryView(Qt::Orientation orientation, QWidget *parent) :
     horizontalScrollBar()->setSingleStep(SLIDER_SINGLE_STEP);
 
     connect(alongScrollBar(), SIGNAL(actionTriggered(int)), this, SLOT(scrollAlong(int)));
+
+    updateScrollBars();
 }
 
 void GalleryView::setModel(QAbstractItemModel *model)
@@ -43,15 +45,10 @@ void GalleryView::setModel(QAbstractItemModel *model)
 
 void GalleryView::setModel(PreviewModel *model)
 {
-    if (mModel != NULL)
-        disconnect(mModel, SIGNAL(modelReset()),
-                   this, SLOT(reset()));
     mModel = model;
     QAbstractItemView::setModel(model);
-    connect(mModel, SIGNAL(modelReset()),
-            this, SLOT(reset()));
-
     mAspectRatioList.clear();
+    updateScrollBars();
     viewport()->update();
 }
 
@@ -60,6 +57,7 @@ void GalleryView::setOrientation(Qt::Orientation orientation)
     resetScrollBars();
     mOrientation = orientation;
     mAspectRatioList.clear();
+    updateScrollBars();
     viewport()->update();
 
     connect(alongScrollBar(), SIGNAL(actionTriggered(int)), this, SLOT(scrollAlong(int)));
@@ -70,6 +68,7 @@ void GalleryView::reset(void)
     qDebug() << "View resetted.";
 
     mAspectRatioList.clear();
+    updateScrollBars();
 
     QAbstractItemView::reset();
 }
@@ -190,6 +189,7 @@ bool GalleryView::isPartiallyVisible(const QModelIndex &index, bool includePaddi
 {
     if (!index.isValid())
         return false;
+
     if (cTotal < (unsigned int) alongDimension(maximumViewportSize()))
         return true; /* This means everything is displayed */
 
@@ -216,6 +216,7 @@ bool GalleryView::isTotallyVisible(const QModelIndex &index, bool includePadding
 {
     if (!index.isValid())
         return false;
+
     if (cTotal < (unsigned int) alongDimension(maximumViewportSize()))
         return true; /* This means everythig is displayed */
 
@@ -244,6 +245,7 @@ void GalleryView::ensureTotallyVisible(const QModelIndex &index, bool includePad
 {
     if (!index.isValid())
         return;
+
     if (cTotal < (unsigned int) alongDimension(maximumViewportSize()))
         return; /* This means everything is displayed */
 
@@ -1058,7 +1060,7 @@ void GalleryView::scrollAlong(int action)
 
 void GalleryView::updateAspectRatioList(void)
 {
-    if (!mModel)
+    if (mModel == NULL)
         return;
 
     double prev = 0.;
