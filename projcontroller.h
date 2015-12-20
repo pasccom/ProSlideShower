@@ -32,14 +32,13 @@ public:
 
     inline void setPaneHeight(int height) {mPane->setFixedHeight(height);}
     inline int paneHeight(void) const {return mPane->height();}
+
+    inline bool isPaneShown(void) const {return mPane->isVisible();}
 signals:
     void documentOpened(const QString& file);
 public slots:
     void goToNextPage() {mDisplays->goToNextPage();}
     void goToPrevPage() {mDisplays->goToPrevPage();}
-
-    void handleDocumentChange(void);
-    void handleFrameChange(void);
 
     inline void start(void) {if (!mTimer->isActive()) mTimer->start();}
     inline void pause(void) {if (mTimer->isActive()) mTimer->stop();}
@@ -50,6 +49,8 @@ public slots:
 private slots:
     inline void handleSecondStep(void) {mTime = mTime.addSecs(1); updateTime();}
     void handleLoadFile(void);
+    void handleDocumentChange(void);
+    void handleFrameChange(void);
 private:
     void updateDisplays(void);
     void updateTime(void);
