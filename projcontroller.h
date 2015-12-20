@@ -37,7 +37,7 @@ public:
 signals:
     void documentOpened(const QString& file);
 public slots:
-    void goToNextPage() {mDisplays->goToNextPage();}
+    void goToNextPage() {mDisplays->goToNextPage(); start();}
     void goToPrevPage() {mDisplays->goToPrevPage();}
 
     inline void start(void) {if (!mTimer->isActive()) mTimer->start();}
