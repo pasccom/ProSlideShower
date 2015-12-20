@@ -18,6 +18,7 @@ public:
     inline bool isOK(void) const {return (mDoc != NULL);}
 
     inline int getCurrentPageNumber(void) const {return mCurrentPage;}
+    inline QModelIndex getCurentIndex(void) const {return index(mCurrentPage);}
     int getPageCount(void) const;
 
     int getCurrentFrameNumber(void) const;
@@ -37,6 +38,7 @@ public:
 public slots:
     bool load(const QString& file);
     bool setCurrentPageNumber(int page);
+    inline void setCurrentPage(const QModelIndex& index) {Q_ASSERT(setCurrentPageNumber(index.row()));}
     inline bool goToNextPage(void) {return setCurrentPageNumber(mCurrentPage + 1);}
     inline bool goToPrevPage(void) {return setCurrentPageNumber(mCurrentPage - 1);}
 signals:
