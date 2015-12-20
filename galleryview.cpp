@@ -551,7 +551,7 @@ void GalleryView::paintEvent(QPaintEvent *pe)
     unsigned int originAcross = (firstAcrossPadding() + firstAcrossMargin()).toPixels(cConstraint);
     unsigned int lengthAccross = cConstraint;
 
-    qDebug() << "Repainting:" << pe->rect() << pixelMin;// << pixelMax << mAspectRatioList;
+    qDebug() << "Repainting:" << pe->rect() << pixelMin << pixelMax;// << mAspectRatioList;
 
     /* Along alignment */
     if(mAlignment & Qt::AlignHCenter)
@@ -634,7 +634,6 @@ void GalleryView::paintEvent(QPaintEvent *pe)
                                 .value<QImage>();
                 cPreviews.replace(i, image);
             }
-            //qDebug() << image;
             // Draws the image:
             if (mOrientation == Qt::Vertical) {
                 if(!image.isNull())
@@ -657,6 +656,9 @@ void GalleryView::paintEvent(QPaintEvent *pe)
 
         currentAlong+=(secondAlongPadding() + mSpacing + firstAlongPadding());
     }
+
+    qDebug() << currentAlong << (n - 1)*(secondAlongPadding() + mSpacing + firstAlongPadding()) + firstAlongMargin() + firstAlongPadding()
+             << currentAlong.toPixels(cConstraint) + mAspectRatioList.at(0)*cConstraint << computeTotal(cConstraint);
 
     // TODO To be deleted:
     /*for(int i = 0; i < mModel->rowCount(); i++)
@@ -1127,9 +1129,9 @@ qreal GalleryView::computeTotal(unsigned int constraint) const
     qreal total = mAspectRatioList.at(0)*constraint;
     int n = mAspectRatioList.size() - 1;
 
-    total += (firstAlongPadding() + secondAlongPadding()).toPixels(constraint) * n;
+    total += ((firstAlongPadding() + secondAlongPadding()) * n).toPixels(constraint);
     total += (firstAlongMargin() + secondAlongMargin()).toPixels(constraint);
-    total += mSpacing.toPixels(constraint) * (n - 1);
+    total += (mSpacing * (n - 1)).toPixels(constraint);
 
     return total;
 }
@@ -1140,11 +1142,12 @@ QSize GalleryView::viewportSize(bool scrolBar)
 
     QStyleOption opt;
     opt.init(this);
-    const int extra = style()->pixelMetric(QStyle::PM_ScrollView_ScrollBarSpacing, &opt, this);
+    const int extra = style()->pixelMetric(QStyle::PM_ScrollView_ScrollBarSpacing, &opt, this)
+                    + style()->pixelMetric(QStyle::PM_ScrollBarExtent, &opt, this);
 
-    int &accross = raccrossDimension(size);
+    int& accross = raccrossDimension(size);
     if(scrolBar)
-        accross -= (accrossDimension(alongScrollBar()->size()) + extra);
+        accross -= extra;
     return size;
 }
 
@@ -1160,7 +1163,7 @@ void GalleryView::updateScrollBars(void)
           totalSizeWithScrollBars = computeTotal(constraintWithScrollBar);
 
     qDebug() << "Constraints: " << constraintWithScrollBar << constraintWithoutScrollBar;
-    qDebug() << "Totaux: " << totalSizeWithoutScrollBars << totalSizeWithScrollBars;
+    qDebug() << "Totaux: " << totalSizeWithScrollBars << totalSizeWithoutScrollBars;
 
     if(totalSizeWithoutScrollBars > pageSize) {
         // Take into account constraintWithScrollBar
