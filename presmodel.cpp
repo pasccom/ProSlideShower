@@ -72,8 +72,10 @@ void PresModel::setVirtualScreens(int horizontal, int vertical)
     Q_ASSERT(horizontal > 0);
     Q_ASSERT(vertical > 0);
 
+    beginResetModel();
     mHVirtualScreens = horizontal;
     mVVirtualScreens = vertical;
+    endResetModel();
     emit virtualScreenNumberChanged();
 }
 
@@ -111,23 +113,20 @@ QVariant PresModel::data(const QModelIndex& index, int role) const
     if ((role != PreviewRole) && (role != Qt::DisplayRole) && (role != Qt::SizeHintRole))
         return QVariant();
 
-    int horizontalVirtualScreen = 1;
-    int verticalVirtualScreen = 1;
-
     double aspectRatio = 1.;
+    double pageWidth = page->pageSizeF().width();
+    double pageHeight = page->pageSizeF().height();
     if (mConstraintOrientation == Qt::Horizontal)
-        aspectRatio = mConstraintDim * mHVirtualScreens / page->pageSizeF().width();
+        aspectRatio = mConstraintDim * mHVirtualScreens / pageWidth;
     if (mConstraintOrientation == Qt::Vertical)
-        aspectRatio = mConstraintDim * mVVirtualScreens / page->pageSizeF().height();
-    double pageWidth = page->pageSizeF().width()*aspectRatio;
-    double pageHeight = page->pageSizeF().height()*aspectRatio;
+        aspectRatio = mConstraintDim * mVVirtualScreens / pageHeight;
+    pageWidth = pageWidth * aspectRatio / mHVirtualScreens;
+    pageHeight = pageHeight * aspectRatio / mVVirtualScreens;
 
     if (role == Qt::SizeHintRole)
-        return QVariant(page->pageSize());
+        return QVariant(QSizeF(pageWidth, pageHeight));
     return QVariant::fromValue<QImage>(page->renderToImage(72.*aspectRatio, 72.*aspectRatio,
-                                                           (horizontalVirtualScreen - 1) * pageWidth / mHVirtualScreens,
-                                                           (verticalVirtualScreen - 1) * pageHeight / mVVirtualScreens,
-                                                           pageWidth / mHVirtualScreens, pageHeight/mVVirtualScreens));
+                                                           0, 0, pageWidth, pageHeight));
 
 }
 
