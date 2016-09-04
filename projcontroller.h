@@ -34,8 +34,6 @@ public:
     inline int paneHeight(void) const {return mPane->height();}
 
     inline bool isPaneShown(void) const {return mPane->isVisible();}
-signals:
-    void documentOpened(const QString& file);
 public slots:
     void goToNextPage() {mDisplays->goToNextPage(); start();}
     void goToPrevPage() {mDisplays->goToPrevPage();}
@@ -48,7 +46,6 @@ public slots:
     void hideControlPane(void) {mPane->hide();}
 private slots:
     inline void handleSecondStep(void) {mTime = mTime.addSecs(1); updateTime();}
-    void handleLoadFile(void);
     void handleDocumentChange(void);
     void handleFrameChange(void);
 private:

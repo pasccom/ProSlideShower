@@ -98,7 +98,7 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     connect(model, SIGNAL(currentFrameChanged()),
             this, SLOT(handleFrameChange()));
     connect(mPane, SIGNAL(openDocumentRequest()),
-            this, SLOT(handleLoadFile()));
+            mDisplays, SLOT(load()));
 }
 
 void ProjController::stop(void)
@@ -177,16 +177,4 @@ void ProjController::updateColor(void)
     setPalette(widgetPalette);
     mTimeProgress->repaint();
     mSlideProgress->repaint();
-}
-
-void ProjController::handleLoadFile(void)
-{
-    QFileDialog fileDialog(this, tr("Choose a PDF file"), "", "*.pdf");
-    fileDialog.setFileMode(QFileDialog::ExistingFile);
-    fileDialog.setWindowModality(Qt::ApplicationModal);
-
-    if ((fileDialog.exec() == QDialog::Rejected) || fileDialog.selectedFiles().isEmpty())
-        return;
-
-    emit documentOpened(fileDialog.selectedFiles().first());
 }

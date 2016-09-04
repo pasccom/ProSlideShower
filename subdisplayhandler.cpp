@@ -49,14 +49,26 @@ void SubDisplayHandler::goToPrevPage()
             at(d)->model()->goToPrevPage();
 }
 
-void SubDisplayHandler::handleLoadFile(void)
+void SubDisplayHandler::load(void)
 {
-    QFileDialog fileDialog(mParent, tr("Choose a PDF file"), "", "*.pdf");
+    QSettings settings(this);
+    if (settings.status() != QSettings::NoError)
+        qWarning() << "Could not open settings. Status:" << settings.status();
+
+    QString openPath = settings.value("openPath").toString();
+    if (!QFile::exists(openPath))
+        openPath = QString::null;
+
+    QFileDialog fileDialog(mParent, tr("Choose a PDF file"), openPath, "*.pdf");
     fileDialog.setFileMode(QFileDialog::ExistingFile);
     fileDialog.setWindowModality(Qt::ApplicationModal);
 
     if ((fileDialog.exec() == QDialog::Rejected) || fileDialog.selectedFiles().isEmpty())
         return;
+
+    QDir openDir(fileDialog.selectedFiles().first());
+    if (openDir.cdUp())
+        settings.setValue("openPath", openDir.absolutePath());
 
     bool ok = false;
     ProjDisplay *senderDisplay = NULL;
@@ -154,9 +166,9 @@ void SubDisplayHandler::updateDisplayActions(ProjDisplay* display)
     offsetAction->setData(QVariant(reinterpret_cast<qulonglong>(display)));
 
     connect(loadMasterAction, SIGNAL(triggered()),
-            this, SLOT(handleLoadFile()));
+            this, SLOT(load()));
     connect(loadSlaveAction, SIGNAL(triggered(bool)),
-            this, SLOT(handleLoadFile()));
+            this, SLOT(load()));
     connect(virtualScreenAction, SIGNAL(triggered()),
             this, SLOT(handleVirtualScreens()));
     connect(offsetAction, SIGNAL(triggered()),

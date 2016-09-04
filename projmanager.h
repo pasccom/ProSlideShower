@@ -13,10 +13,6 @@ class ProjManager : public SubDisplayHandler
 public:
     ProjManager(QObject *parent = NULL);
     ~ProjManager(void);
-signals:
-
-public slots:
-    void load(const QString& file, int h = 0, int v = 1);
 protected:
     bool eventFilter(QObject* watched, QEvent* event);
     void keyPressEvent(QKeyEvent *ke);

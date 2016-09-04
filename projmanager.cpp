@@ -57,10 +57,6 @@ ProjManager::ProjManager(QObject *parent) :
 
     updateDisplayActions();
 
-    if (mController != NULL)
-        connect(mController, SIGNAL(documentOpened(const QString&)),
-                this, SLOT(load(const QString&)));
-
 #ifdef SIMULATING_DESKTOPS
     delete desktop;
 #endif
@@ -70,14 +66,6 @@ ProjManager::~ProjManager(void)
 {
     if (mController != NULL)
         delete mController;
-}
-
-
-void ProjManager::load(const QString& file, int h, int v)
-{
-    SubDisplayHandler::load(file, h, v);
-    if (mController != NULL)
-        mController->setModel(model());
 }
 
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)
