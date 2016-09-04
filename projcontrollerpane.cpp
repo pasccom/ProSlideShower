@@ -63,14 +63,15 @@ ProjControllerPane::ProjControllerPane(QWidget *parent) :
            this, SIGNAL(openDocumentRequest()));
 }
 
-
 void ProjControllerPane::setModel(PresModel *model)
 {
     if (mSlidesView->model() != NULL) {
-        connect(mSlidesView, SIGNAL(doubleClicked(const QModelIndex&)),
-                mSlidesView->model(), SLOT(setCurrentPage(const QModelIndex&)));
-        connect(mSlidesView->model(), SIGNAL(currentPageChanged()),
-                this, SIGNAL(handlePageChange()));
+        disconnect(mSlidesView, SIGNAL(doubleClicked(const QModelIndex&)),
+                   mSlidesView->model(), SLOT(setCurrentPage(const QModelIndex&)));
+        disconnect(mSlidesView->model(), SIGNAL(currentPageChanged()),
+                   this, SIGNAL(handlePageChange()));
+        disconnect(mSlidesView->model(), SIGNAL(modelReset()),
+                   this, SLOT(handlePageChange()));
     }
 
     mSlidesView->setModel(model);
