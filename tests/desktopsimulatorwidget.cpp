@@ -70,5 +70,5 @@ QRect DesktopSimulatorWidget::computeScreen(int screen) const
     int w = mAuxScreenRect.width() / mHDesktops;
     int h = mAuxScreenRect.height() / mVDesktops;
 
-    return QRect(x*w, y*h, w, h);
+    return QRect(mAuxScreenRect.x() + x*w, mAuxScreenRect.y() + y*h, w, h);
 }
