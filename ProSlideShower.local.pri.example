@@ -1,0 +1,11 @@
+# Lib poppler path
+win32 {
+    isEmpty(LIB_POPPLER_INCLUDE_PATH): LIB_POPPLER_INCLUDE_PATH="C:/Dev/Poppler/include"
+    isEmpty(LIB_POPPLER_LIBRARY_PATH): LIB_POPPLER_LIBRARY_PATH="C:/Dev/Poppler/lib"
+}
+
+# Enable/disable debuging mode:
+isEmpty(SIMULATING_DESKTOPS): SIMULATING_DESKTOPS=no
+isEmpty(H_DESKTOPS): H_DESKTOPS=2
+isEmpty(V_DESKTOPS): V_DESKTOPS=1
+

@@ -32,6 +32,9 @@ Thumbs.db
 /.qmake.cache
 /.qmake.stash
 
+# Local config files:
+*.local.pri
+
 # qtcreator generated files
 *.pro.user*
 

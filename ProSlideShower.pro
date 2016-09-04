@@ -12,7 +12,6 @@ SOURCES += \
     projcontroller.cpp \
     projmanager.cpp \
     presstyle.cpp \
-    tests/desktopsimulatorwidget.cpp \
     subdisplayhandler.cpp \
     projcontrollerpane.cpp \
     galleryview.cpp
@@ -23,27 +22,28 @@ HEADERS += \
     projcontroller.h \
     projmanager.h \
     presstyle.h \
-    tests/desktopsimulatorwidget.h \
     subdisplayhandler.h \
     projcontrollerpane.h \
     galleryview.h \
     previewmodel.h
 
-SIMULATING_DESKTOPS=yes
-H_DESKTOPS=2
-V_DESKTOPS=1
+exists(ProSlideShower.local.pri) {
+    include(ProSlideShower.local.pri)
+}
 
-!isEmpty(SIMULATING_DESKTOPS) {
+equals(SIMULATING_DESKTOPS, "yes") {
+    message("Building with simulated desktops ($${V_DESKTOPS}x$${H_DESKTOPS})")
+    SOURCES += tests/desktopsimulatorwidget.cpp
+    HEADERS += tests/desktopsimulatorwidget.h
     DEFINES+="SIMULATING_DESKTOPS"
     DEFINES+="SIMULATING_H_DESKTOPS=$$H_DESKTOPS"
     DEFINES+="SIMULATING_V_DESKTOPS=$$V_DESKTOPS"
 }
 
 # Link against the right version of libPoppler
-win32 {
-    INCLUDEPATH += C:/Dev/Poppler/include
-    LIBS += -LC:/Dev/Poppler/lib
-}
+!isEmpty(LIB_POPPLER_INCLUDE_PATH): INCLUDEPATH += "$$LIB_POPPLER_INCLUDE_PATH"
+!isEmpty(LIB_POPPLER_LIBRARY_PATH): LIBS += "-L$$LIB_POPPLER_LIBRARY_PATH"
+
 greaterThan(QT_VERSION, 5.0.0) {
     LIBS += -lpoppler-qt5
 } else {
