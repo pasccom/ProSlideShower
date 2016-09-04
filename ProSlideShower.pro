@@ -5,27 +5,34 @@ greaterThan(QT_VERSION, 5.0.0) {
     QT += widgets
 }
 
-SOURCES += \
-    main.cpp \
-    projdisplay.cpp \
-    presmodel.cpp \
-    projcontroller.cpp \
-    projmanager.cpp \
-    presstyle.cpp \
-    subdisplayhandler.cpp \
-    projcontrollerpane.cpp \
-    galleryview.cpp
+SOURCES +=                  \
+    main.cpp                \
+    projdisplay.cpp         \
+    presmodel.cpp           \
+    projcontroller.cpp      \
+    projmanager.cpp         \
+    presstyle.cpp           \
+    subdisplayhandler.cpp   \
+    projcontrollerpane.cpp  \
+    galleryview.cpp         \
 
-HEADERS += \
-    projdisplay.h \
-    presmodel.h \
-    projcontroller.h \
-    projmanager.h \
-    presstyle.h \
-    subdisplayhandler.h \
-    projcontrollerpane.h \
-    galleryview.h \
-    previewmodel.h
+HEADERS +=                  \
+    projdisplay.h           \
+    presmodel.h             \
+    projcontroller.h        \
+    projmanager.h           \
+    presstyle.h             \
+    subdisplayhandler.h     \
+    projcontrollerpane.h    \
+    galleryview.h           \
+    previewmodel.h          \
+
+RESOURCES +=                \
+    proslideshower.qrc      \
+
+TRANSLATIONS +=             \
+    proslideshower_en.ts    \
+    proslideshower_fr.ts    \
 
 exists(ProSlideShower.local.pri) {
     include(ProSlideShower.local.pri)
@@ -69,6 +76,26 @@ unix {
     else:DESTDIR = ./release
 }
 
-RESOURCES += \
-    proslideshower.qrc
+# lupdate target :
+isEmpty(QMAKE_LUPDATE) {
+    win32:QMAKE_LUPDATE = $$[QT_INSTALL_BINS]\lupdate.exe
+    else:QMAKE_LUPDATE = $$[QT_INSTALL_BINS]/lupdate
+}
 
+lupdate.depends += $$SOURCES
+lupdate.depends += $$TRANSLATIONS
+lupdate.commands = $$QMAKE_LUPDATE ProSlideShower.pro
+QMAKE_EXTRA_TARGETS += lupdate
+
+# lrelease target :
+isEmpty(QMAKE_LRELEASE) {
+    win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe
+    else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+}
+
+lrelease.input = TRANSLATIONS
+lrelease.output = ${QMAKE_FILE_BASE}.qm
+lrelease.commands = $$QMAKE_LRELEASE ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_BASE}.qm
+lrelease.CONFIG += no_link
+QMAKE_EXTRA_COMPILERS += lrelease
+POST_TARGETDEPS += compiler_lrelease_make_all
