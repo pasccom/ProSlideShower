@@ -59,7 +59,7 @@ void SubDisplayHandler::load(void)
     if (!QFile::exists(openPath))
         openPath = QString::null;
 
-    QFileDialog fileDialog(mParent, tr("Choose a PDF file"), openPath, "*.pdf");
+    QFileDialog fileDialog(mParent, tr("Choose a PDF file"), openPath, tr("PDF files (*.pdf)"));
     fileDialog.setFileMode(QFileDialog::ExistingFile);
     fileDialog.setWindowModality(Qt::ApplicationModal);
 
