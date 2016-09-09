@@ -125,8 +125,11 @@ QVariant PresModel::data(const QModelIndex& index, int role) const
 
     if (role == Qt::SizeHintRole)
         return QVariant(QSizeF(pageWidth, pageHeight));
-    return QVariant::fromValue<QImage>(page->renderToImage(72.*aspectRatio, 72.*aspectRatio,
-                                                           0, 0, pageWidth, pageHeight));
+    // TODO remove this: return QImage(pageWidth, pageHeight, QImage::Format_RGB32);
+    QImage pageImg = page->renderToImage(72.*aspectRatio, 72.*aspectRatio,
+                                         0, 0, pageWidth, pageHeight);
+    delete page;
+    return QVariant::fromValue<QImage>(pageImg);
 
 }
 
@@ -146,10 +149,13 @@ QImage PresModel::getPage(int number, const QRect& boundingRect, int horizontalV
     double aspectRatio = qMin(boundingRect.width() * mHVirtualScreens / page->pageSizeF().width(), boundingRect.height() * mVVirtualScreens / page->pageSizeF().height());
     double pageWidth = page->pageSizeF().width()*aspectRatio;
     double pageHeight = page->pageSizeF().height()*aspectRatio;
-    return page->renderToImage(72.*aspectRatio, 72.*aspectRatio,
-                               (horizontalVirtualScreen - 1) * pageWidth / mHVirtualScreens,
-                               (verticalVirtualScreen - 1) * pageHeight / mVVirtualScreens,
-                               pageWidth / mHVirtualScreens, pageHeight/mVVirtualScreens);
+    // TODO remove this: return QImage(boundingRect.size(), QImage::Format_RGB32);
+    QImage pageImg = page->renderToImage(72.*aspectRatio, 72.*aspectRatio,
+                                         (horizontalVirtualScreen - 1) * pageWidth / mHVirtualScreens,
+                                         (verticalVirtualScreen - 1) * pageHeight / mVVirtualScreens,
+                                         pageWidth / mHVirtualScreens, pageHeight/mVVirtualScreens);
+    delete page;
+    return pageImg;
 }
 
 int PresModel::getPageCount(void) const
