@@ -151,7 +151,9 @@ void SubDisplayHandler::updateDisplayActions(void)
         actionsToDelete.unite(at(d)->actions().toSet());
         updateDisplayActions(at(d));
     }
-    qDeleteAll(actionsToDelete);
+
+    foreach (QAction* action, actionsToDelete)
+        action->deleteLater();
 }
 
 void SubDisplayHandler::updateDisplayActions(ProjDisplay* display)

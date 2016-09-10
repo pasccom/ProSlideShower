@@ -123,7 +123,7 @@ void ProjDisplay::contextMenuEvent(QContextMenuEvent *cme)
         cme->accept();
         menu->popup(cme->globalPos());
 
-        connect(menu, SIGNAL(aboutToHide()),
+        connect(menu, SIGNAL(triggered(QAction*)),
                 menu, SLOT(deleteLater()));
     } else {
         cme->ignore();
