@@ -32,8 +32,16 @@ ProjDisplay::ProjDisplay(const QString& path, QWidget* parent) :
     connectToModel();
 }
 
+ProjDisplay::~ProjDisplay(void)
+{
+    if (mModelOwned && (mModel != NULL))
+        delete mModel;
+}
+
 void ProjDisplay::setModel(PresModel* model)
 {
+    disconnectFromModel();
+
     if (mModelOwned)
         delete mModel;
 
@@ -46,6 +54,8 @@ void ProjDisplay::setModel(PresModel* model)
 
 void ProjDisplay::setModel(const QString& path)
 {
+    disconnectFromModel();
+
     if (mModelOwned)
         delete mModel;
 
@@ -66,6 +76,19 @@ void ProjDisplay::connectToModel(void)
     connect(mModel, SIGNAL(virtualScreenNumberChanged()),
             this, SLOT(update()));
     connect(mModel, SIGNAL(currentPageChanged()),
+            this, SLOT(update()));
+}
+
+void ProjDisplay::disconnectFromModel(void)
+{
+    if (mModel == NULL)
+        return;
+
+    disconnect(mModel, SIGNAL(documentChanged()),
+            this, SLOT(update()));
+    disconnect(mModel, SIGNAL(virtualScreenNumberChanged()),
+            this, SLOT(update()));
+    disconnect(mModel, SIGNAL(currentPageChanged()),
             this, SLOT(update()));
 }
 

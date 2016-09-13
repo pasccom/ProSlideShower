@@ -46,6 +46,7 @@ public:
     ~ProjManager(void);
 protected:
     /*!
+     * \internal
      * \brief Filter for application-wide events
      *
      * This method is called whenever an event occurs at the application level.
@@ -59,6 +60,7 @@ protected:
      */
     bool eventFilter(QObject* watched, QEvent* event);
     /*!
+     * \internal
      * \brief Key press event callback
      *
      * This function is called when the user presses a key.
@@ -70,6 +72,7 @@ protected:
      */
     void keyPressEvent(QKeyEvent *ke);
     /*!
+     * \internal
      * \brief Key release event callback
      *
      * This function is called when the user releases a key.
@@ -81,6 +84,7 @@ protected:
      */
     void keyReleaseEvent(QKeyEvent* ke);
     /*!
+     * \internal
      * \brief Mouse move event callback
      *
      * This function is called whenever the user moves the mouse.
