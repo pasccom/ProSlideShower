@@ -41,9 +41,9 @@ public:
     /*!
      * \brief Destructor
      *
-     * Deletes the style.
+     * Deletes the style and saves presentation time in settings.
      */
-    ~ProjController(void) {delete mStyle;}
+    ~ProjController(void);
 
     /*!
      * \brief Set the model

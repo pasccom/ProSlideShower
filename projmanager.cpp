@@ -28,7 +28,6 @@ ProjManager::ProjManager(QObject *parent) :
         mController = new ProjController(model(), NULL);
         mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
         mController->show();
-        mController->setTotalTime(QTime(0, 45, 0));
         mController->setPaneHeight(200);
 
         setParentWidget(mController);

@@ -13,9 +13,15 @@
 ProjController::ProjController(PresModel *model, QWidget *parent) :
     QWidget(parent, Qt::FramelessWindowHint), mDisplays(new SubDisplayHandler(model, parent))
 {
+    QSettings settings(this);
+    if (settings.status() != QSettings::NoError)
+        qWarning() << "Could not open settings. Status:" << settings.status();
+
     mDisplays->setParentWidget(this);
 
     // Presentation timing:
+    QVariant totalTime = settings.value("totalTime", QVariant(QTime(0, 45, 0)));
+    mTotalTime = totalTime.canConvert(QVariant::Time) ? totalTime.toTime() : QTime(0, 45, 0);
     mTime = QTime(0, 0, 0);
     mFormat = "hh:mm:ss";
 
@@ -107,6 +113,16 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
             this, SLOT(configure()));
     connect(configAction, SIGNAL(triggered()),
             this, SLOT(configure()));
+}
+
+ProjController::~ProjController(void)
+{
+    QSettings settings(this);
+    if (settings.status() != QSettings::NoError)
+        qWarning() << "Could not open settings. Status:" << settings.status();
+    settings.setValue("totalTime", mTotalTime);
+
+    delete mStyle;
 }
 
 void ProjController::stop(void)
