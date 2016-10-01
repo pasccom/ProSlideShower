@@ -8,6 +8,14 @@
 #   include <QtGui>
 #endif
 
+SubDisplayHandler::SubDisplayHandler(PresModel* model, QObject* parent):
+    QObject(parent), QVector<ProjDisplay *>(), mModel(model), mParent(NULL)
+{
+    if (mModel != NULL)
+        connect(mModel, SIGNAL(virtualScreenNumberChanged()),
+                this, SLOT(updateDisplayActions()));
+}
+
 SubDisplayHandler::~SubDisplayHandler(void)
 {
     for (int d = 0; d < size(); d++)
@@ -16,7 +24,13 @@ SubDisplayHandler::~SubDisplayHandler(void)
 
 void SubDisplayHandler::setModel(PresModel* model)
 {
+    if (mModel != NULL)
+        disconnect(mModel, SIGNAL(virtualScreenNumberChanged()),
+                this, SLOT(updateDisplayActions()));
     mModel = model;
+    if (mModel != NULL)
+        connect(mModel, SIGNAL(virtualScreenNumberChanged()),
+                this, SLOT(updateDisplayActions()));
 
     for (int d = 0; d < size(); d++)
         if (at(d) != NULL)

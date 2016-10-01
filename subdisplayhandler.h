@@ -31,8 +31,7 @@ public:
      * \param model The master model for the children ProjDisplay.
      * \param parent The parent object.
      */
-    inline SubDisplayHandler(PresModel* model = NULL, QObject* parent = NULL):
-        QObject(parent), QVector<ProjDisplay *>(), mModel(model), mParent(NULL) {}
+    SubDisplayHandler(PresModel* model = NULL, QObject* parent = NULL);
     /*!
      * \brief Destructor
      *
@@ -75,32 +74,6 @@ public:
      */
     inline PresModel* model() const {return mModel;}
 
-    /*!
-     * \brief Go to next page
-     *
-     * This function changes forward the current page in the slave models
-     * (models not equal to the master model) used by children ProjDisplay.
-     * \sa goToPrevPage()
-     */
-    void goToNextPage();
-    /*!
-     * \brief Go to prev page
-     *
-     * This function changes backward the current page in the slave models
-     * (models not equal to the master model) used by children ProjDisplay.
-     * \sa goToNextPage()
-     */
-    void goToPrevPage();
-
-    /*!
-     * \brief Update display actions
-     *
-     * Updates the actions shown in the context menu of the children ProjDisplay.
-     * \internal
-     * \sa updateDisplayActions(ProjDisplay*)
-     * \endinternal
-     */
-    virtual void updateDisplayActions(void);
 public slots:
     /*!
      * \brief Load file
@@ -131,6 +104,34 @@ public slots:
      * \sa load()
      */
     virtual void load(const QString& file, int h = 0, int v = 1);
+
+    /*!
+     * \brief Go to next page
+     *
+     * This function changes forward the current page in the slave models
+     * (models not equal to the master model) used by children ProjDisplay.
+     * \sa goToPrevPage()
+     */
+    void goToNextPage();
+    /*!
+     * \brief Go to prev page
+     *
+     * This function changes backward the current page in the slave models
+     * (models not equal to the master model) used by children ProjDisplay.
+     * \sa goToNextPage()
+     */
+    void goToPrevPage();
+
+    /*!
+     * \brief Update display actions
+     *
+     * Updates the actions shown in the context menu of the children ProjDisplay.
+     * \internal
+     * \sa updateDisplayActions(ProjDisplay*)
+     * \endinternal
+     */
+    virtual void updateDisplayActions(void);
+
 private slots:
     /*!
      * \brief Let the user choose the number of horizontal virtual screens
