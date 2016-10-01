@@ -161,15 +161,6 @@ protected:
      * \param pe The paint event.
      */
     void paintEvent(QPaintEvent *pe);
-    /*!
-     * \internal
-     * \brief Context menu event
-     *
-     * This function is called whenever the user requests a context menu.
-     * It collects the widget's actions in a menu and shows it.
-     * \param cme The context menu event.
-     */
-    void contextMenuEvent(QContextMenuEvent *cme);
 private:
     /*!
      * \brief Connect to the model.

@@ -9,6 +9,8 @@
 ProjDisplay::ProjDisplay(PresModel* model, QWidget* parent) :
     QWidget(parent, Qt::FramelessWindowHint)
 {
+    setContextMenuPolicy(Qt::ActionsContextMenu);
+
     mModel = model;
     mModelOwned = false;
 
@@ -22,6 +24,8 @@ ProjDisplay::ProjDisplay(PresModel* model, QWidget* parent) :
 ProjDisplay::ProjDisplay(const QString& path, QWidget* parent) :
     QWidget(parent, Qt::FramelessWindowHint)
 {
+    setContextMenuPolicy(Qt::ActionsContextMenu);
+
     mModel = new PresModel(path, this);
     mModelOwned = true;
 
@@ -135,21 +139,4 @@ void ProjDisplay::paintEvent(QPaintEvent *pe)
 
     QRectF imgRect((rect().width() - pageImg.width()) / 2., (rect().height() - pageImg.height()) / 2., pageImg.width(), pageImg.height());
     p.drawImage(imgRect, pageImg);
-}
-
-void ProjDisplay::contextMenuEvent(QContextMenuEvent *cme)
-{
-    QMenu *menu = new QMenu(this);
-    foreach(QAction* action, actions())
-        menu->addAction(action);
-    if (menu->actions().count() > 0) {
-        cme->accept();
-        menu->popup(cme->globalPos());
-
-        connect(menu, SIGNAL(triggered(QAction*)),
-                menu, SLOT(deleteLater()));
-    } else {
-        cme->ignore();
-        delete menu;
-    }
 }
