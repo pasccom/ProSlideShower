@@ -246,7 +246,6 @@ private:
     void updateColor(void);
 
     SubDisplayHandler *mDisplays;   /*!< The handler of the children ProjDisplay. */
-    PresStyle* mStyle;              /*!< The style used to paint the widget. */
     QSplitter* mSplitter;           /*!< The splitter which contains the children ProjDisplay. */
     ProjControllerPane* mPane;      /*!< The auto-hide pane contraining the miniature gallery for the presentation slides. */
     QLabel* mTimeLabel;             /*!< The time label displaying the presentation time. */

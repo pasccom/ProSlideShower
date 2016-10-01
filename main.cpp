@@ -65,6 +65,9 @@ int main(int argc, char** argv)
         }
     }
 
+    // GUI style
+    app.setStyle(new PresStyle());
+
     if (!translator.isEmpty())
         app.installTranslator(&translator);
     else

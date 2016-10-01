@@ -29,9 +29,7 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     mTimer->setInterval(1000);
     mTimer->setSingleShot(false);
 
-    // Style, palette and font override:
-    mStyle = new PresStyle();
-
+    // Palette and font override:
     QPalette widgetPalette = palette();
     widgetPalette.setColor(QPalette::Window, Qt::black);
     widgetPalette.setColor(QPalette::WindowText, Qt::white);
@@ -71,12 +69,10 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     mSlideLabel->setFont(widgetFont);
 
     mTimeProgress = new QProgressBar(this);
-    mTimeProgress->setStyle(mStyle);
     mTimeProgress->setRange(0, 0);
     mTimeProgress->setValue(0);
 
     mSlideProgress = new QProgressBar(this);
-    mSlideProgress->setStyle(mStyle);
     mSlideProgress->setRange(0, 0);
     mSlideProgress->setValue(0);
 
@@ -121,8 +117,6 @@ ProjController::~ProjController(void)
     if (settings.status() != QSettings::NoError)
         qWarning() << "Could not open settings. Status:" << settings.status();
     settings.setValue("totalTime", mTotalTime);
-
-    delete mStyle;
 }
 
 void ProjController::stop(void)
