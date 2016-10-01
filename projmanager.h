@@ -2,6 +2,9 @@
 #define PROJMANAGER_H
 
 #include "subdisplayhandler.h"
+#include "projcontroller.h"
+
+#include <QTime>
 
 class ProjController;
 class QKeyEvent;
@@ -44,6 +47,33 @@ public:
      * Desallocates ressources not handled by Qt (the ProjController).
      */
     ~ProjManager(void);
+
+    /*!
+     * \brief Set the master model
+     *
+     * Sets the master model used by all children ProjDisplay.
+     * \note It may be \c NULL, to deactivate display.
+     * \param model The model to be used as master.
+     * \sa model()
+     */
+    void setModel(PresModel* model);
+
+    /*!
+     * \brief Set presentation duration
+     *
+     * Sets the total presentation duration.
+     * \param length The time of the presentation.
+     * \sa totalTime()
+     */
+    inline void setTotalTime(const QTime& length) {if (mController != NULL) mController->setTotalTime(length);}
+    /*!
+     * \brief Get presentation duration
+     *
+     * Gets the total presentation duration.
+     * \return The time of the presentation.
+     * \sa setTotalTime()
+     */
+    inline QTime totalTime(void) const {return (mController != NULL) ? mController->totalTime() : QTime();}
 protected:
     /*!
      * \internal
@@ -93,6 +123,7 @@ protected:
      */
     void mouseMoveEvent(QMouseEvent *me);
 private:
+
     ProjController* mController; /*!< A ProjController to control the slideshow. */
 };
 
