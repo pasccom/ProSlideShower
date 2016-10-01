@@ -184,6 +184,13 @@ public slots:
      * \sa showControlPane()
      */
     inline void hideControlPane(void) {mPane->hide();}
+    /*!
+     * \brief Configuration
+     *
+     * Opens a dialog to configure the presentation.
+     * Currently only the total presentation time can be configured.
+     */
+    void configure(void);
 private slots:
     /*!
      * \brief Updates the presentation time

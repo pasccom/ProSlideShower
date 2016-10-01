@@ -49,6 +49,8 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
         mSplitter->addWidget(mDisplays->at(d));
     }
 
+    QAction *configAction = new QAction(QIcon(":/icons/configure.png"), tr("Configure"), this);
+
     // Header:
     mPane = new ProjControllerPane(this);
     mPane->setModel(model);
@@ -57,6 +59,8 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
     // Footer:
     mTimeLabel = new QLabel("00:00:00", this);
     mTimeLabel->setFont(widgetFont);
+    mTimeLabel->addAction(configAction);
+    mTimeLabel->setContextMenuPolicy(Qt::ActionsContextMenu);
     mSlideLabel = new QLabel("0/0", this);
     mSlideLabel->setFont(widgetFont);
 
@@ -99,6 +103,10 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
             this, SLOT(handleFrameChange()));
     connect(mPane, SIGNAL(openDocumentRequest()),
             mDisplays, SLOT(load()));
+    connect(mPane, SIGNAL(configureRequest()),
+            this, SLOT(configure()));
+    connect(configAction, SIGNAL(triggered()),
+            this, SLOT(configure()));
 }
 
 void ProjController::stop(void)
@@ -177,4 +185,35 @@ void ProjController::updateColor(void)
     setPalette(widgetPalette);
     mTimeProgress->repaint();
     mSlideProgress->repaint();
+}
+
+void ProjController::configure(void)
+{
+    QDialog configDialog(this);
+    configDialog.setModal(true);
+    configDialog.setWindowTitle(tr("Presentation configuration"));
+
+    QTimeEdit totalTimeEdit(mTotalTime, &configDialog);
+    QLabel totalTimeLabel(tr("Presentation duration:"), &configDialog);
+    totalTimeLabel.setBuddy(&totalTimeEdit);
+
+    QDialogButtonBox configButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &configDialog);
+    connect(&configButtons, SIGNAL(accepted()), &configDialog, SLOT(accept()));
+    connect(&configButtons, SIGNAL(rejected()), &configDialog, SLOT(reject()));
+
+    QGridLayout configLayout;
+    configLayout.setContentsMargins(2, 2, 2, 2);
+    configLayout.setSpacing(2);
+    configLayout.addWidget(&totalTimeLabel, 0, 0, Qt::AlignLeft);
+    configLayout.addWidget(&totalTimeEdit, 0, 1);
+    configLayout.addWidget(&configButtons, 1, 0, 1, 2, Qt::AlignRight);
+    configDialog.setLayout(&configLayout);
+
+    int res = configDialog.exec();
+
+    if (res == QDialog::Rejected)
+        return;
+
+    mTotalTime = totalTimeEdit.time();
+    updateTime();
 }

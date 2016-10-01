@@ -61,6 +61,8 @@ ProjControllerPane::ProjControllerPane(QWidget *parent) :
            qApp, SLOT(quit()));
    connect(mOpenButton, SIGNAL(clicked(bool)),
            this, SIGNAL(openDocumentRequest()));
+   connect(mConfigButton, SIGNAL(clicked(bool)),
+           this, SIGNAL(configureRequest()));
 }
 
 void ProjControllerPane::setModel(PresModel *model)

@@ -2,6 +2,25 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>ProjController</name>
+    <message>
+        <location filename="projcontroller.cpp" line="52"/>
+        <source>Configure</source>
+        <oldsource>Configuration</oldsource>
+        <translation>Configuration</translation>
+    </message>
+    <message>
+        <location filename="projcontroller.cpp" line="194"/>
+        <source>Presentation configuration</source>
+        <translation>Configuration de la présentation</translation>
+    </message>
+    <message>
+        <location filename="projcontroller.cpp" line="197"/>
+        <source>Presentation duration:</source>
+        <translation>Durée de la présentation:</translation>
+    </message>
+</context>
+<context>
     <name>ProjControllerPane</name>
     <message>
         <location filename="projcontrollerpane.cpp" line="28"/>
@@ -52,27 +71,27 @@
         <translation>Entrez le décalage de la vue</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="159"/>
+        <location filename="subdisplayhandler.cpp" line="161"/>
         <source>Load &amp;Master</source>
         <translation>Ouvrir un document &amp;maître</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="161"/>
+        <location filename="subdisplayhandler.cpp" line="163"/>
         <source>Load &amp;Slave</source>
         <translation>Ouvrir un document e&amp;sclave</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="163"/>
+        <location filename="subdisplayhandler.cpp" line="165"/>
         <source>&amp;Virtual screen number</source>
         <translation>Nombre d&apos;écrans &amp;virtuels</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="165"/>
+        <location filename="subdisplayhandler.cpp" line="167"/>
         <source>&amp;Display offset</source>
         <translation>&amp;Décalage de l&apos;affichage</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="189"/>
+        <location filename="subdisplayhandler.cpp" line="191"/>
         <source>Use virtual screen &amp;%1</source>
         <translation>Utiliser l&apos;écran virtuel n°&amp;%1</translation>
     </message>

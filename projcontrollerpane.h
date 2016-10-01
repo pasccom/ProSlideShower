@@ -57,6 +57,13 @@ signals:
      * the open master document button.
      */
     void openDocumentRequest(void);
+    /*!
+     * \brief Configure request
+     *
+     * This signal is emitted when the user clicks
+     * the configure button.
+     */
+    void configureRequest(void);
 protected:
     /*!
      * \internal

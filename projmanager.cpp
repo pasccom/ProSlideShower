@@ -36,6 +36,7 @@ ProjManager::ProjManager(QObject *parent) :
         new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), mController, SLOT(start()), 0, Qt::ApplicationShortcut);
         new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), mController, SLOT(pause()), 0, Qt::ApplicationShortcut);
         new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_X), mController, SLOT(stop()), 0, Qt::ApplicationShortcut);
+        new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_C), mController, SLOT(configure()), 0, Qt::ApplicationShortcut);
     } else {
         mController = NULL;
     }

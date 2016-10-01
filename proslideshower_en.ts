@@ -2,6 +2,25 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>ProjController</name>
+    <message>
+        <location filename="projcontroller.cpp" line="52"/>
+        <source>Configure</source>
+        <oldsource>Configuration</oldsource>
+        <translation>Configure</translation>
+    </message>
+    <message>
+        <location filename="projcontroller.cpp" line="194"/>
+        <source>Presentation configuration</source>
+        <translation>Presentation configuration</translation>
+    </message>
+    <message>
+        <location filename="projcontroller.cpp" line="197"/>
+        <source>Presentation duration:</source>
+        <translation>Presentation duration:</translation>
+    </message>
+</context>
+<context>
     <name>ProjControllerPane</name>
     <message>
         <location filename="projcontrollerpane.cpp" line="28"/>
@@ -52,27 +71,27 @@
         <translation>Enter the offset of the display</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="159"/>
+        <location filename="subdisplayhandler.cpp" line="161"/>
         <source>Load &amp;Master</source>
         <translation>Open a &amp;master document</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="161"/>
+        <location filename="subdisplayhandler.cpp" line="163"/>
         <source>Load &amp;Slave</source>
         <translation>Open a &amp;slave document</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="163"/>
+        <location filename="subdisplayhandler.cpp" line="165"/>
         <source>&amp;Virtual screen number</source>
         <translation>&amp;Virtual screen number</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="165"/>
+        <location filename="subdisplayhandler.cpp" line="167"/>
         <source>&amp;Display offset</source>
         <translation>&amp;Display offset</translation>
     </message>
     <message>
-        <location filename="subdisplayhandler.cpp" line="189"/>
+        <location filename="subdisplayhandler.cpp" line="191"/>
         <source>Use virtual screen &amp;%1</source>
         <translation>Use virtual screen &amp;%1</translation>
     </message>
