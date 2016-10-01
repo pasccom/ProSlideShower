@@ -1,0 +1,81 @@
+/*!
+ * \mainpage
+ * 
+ * \section intro Introduction
+ * <i>Pro slideshower</i> is a light-weight PDF reader especially suitable for
+ * presenting slides in PDF format generated with LaTeX Beamer.
+ * Of course, it can read any PDF file, with the following limitations:
+ *	\li Animations are not supported.
+ *	\li Embedded video is not supported.
+ *	\li Transitions animation is unsupported.
+ *	\li Hyperlinks in presentation do not work 
+ * (but this will be addressed in near future).
+ *
+ * \section usage Usage
+ * On a one screen system, <i>Pro slideshower</i> displays the slides in fullscreen
+ * (keeping the aspect ratio) over a black backgound.
+ * In this mode the slides necesarily originate from the master document.
+ * You can navigate in the presentation with the arrows keys as follows
+ *	\li Go to next slide: Right arrow, down arrow, page down.
+ *	\li Go to previous slide: Left arrow, up arrow, page up.
+ *
+ * This should be compatible with presentation remote controls.
+ * Options for the display are in the context menu (acessed by right click).
+ * There you can choose the shown document, the virtual screen and the offset.
+ *
+ * However on multi-sceens displays, <i>Pro slideshower</i> deploys all its power.
+ * On the primary screen, which is normally the computer screen, a controller is displayed,
+ * while slides are displayed full-screen on all the other screens.
+ * The slides displayed on these screens might not be the same:
+ * You can display other virtual screen slides, slide with offset or even other file slides.
+ * When other file (slave document) slides are used, they are synchronized with the master
+ * document. When no slide can be shown (due to offset or since the slave file is shorter than
+ * the master file, no slide is displayed and the screen is black).
+ * 
+ * The controller allows a nice management of the presentation.
+ * It features:
+ *  \li Progress bars: One give the slide (or frame if Beamer <tt>*.aux</tt>
+ * or <tt>*.nav</tt> file can be found) progress; the other displays the time ellapsed
+ * over the total presentation time (which can be configured in the configure menu).
+ * The color of the progress bar tell whether the presentation is too fast or too slow
+ * as follows: Blue is too fast, green is fast, white is OK, yellow is slow, and red very slow.
+ * The presentation starts automatically when the next slide is shown. However, it can also
+ * be managed with \ref shortcuts.
+ *	\li Miniature slide view: It is shown when the mouse approaches the controller window top
+ * and allows to go to the desired slide directly by double clicking. The miniature gallery is
+ * synchronized with the presentation.
+ *  \li Tool buttons: These buttons are also located in the auto-hide pane. There is the open master
+ * button, which loads a master document on all screens, a configure button and a close button
+ * to close the presentation.
+ * 
+ * \section shortcuts Keybord shortcuts
+ *
+ * \subsection navshortcuts Navigation shortcuts
+ *	\li <b>Right arrow</b>: Go to next slide
+ *	\li <b>Left arrow</b>: Go to previous slide
+ *	\li <b>Down arrow</b>: Go to next slide
+ *	\li <b>Up arrow</b>: Go to previous slide
+ *	\li <b>Page down</b>: Go to next slide
+ *	\li <b>Page up</b>: Go to previous slide
+ *
+ * \subsection otherShortcut Presentation management shortcuts
+ *	\li <b>Alt + F4</b>: Closes the application (all windows)
+ *	\li <b>Ctrl + S</b>: Starts presentation, i.e., starts presentation timer
+ *	\li <b>Ctrl + P</b>: Pauses presentation, i.e. stops presentation timer but do not reset it
+ *	\li <b>Ctrl + X</b>: Stops presentation, i.e. stops presentation timer and reset it
+ *  
+ * \section license Licensing information
+ *
+ * <i>Pro slideshower</i> is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * <i>Pro slideshower</i> is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with <i>Pro slideshower</i>. If not, see http://www.gnu.org/licenses/
+ */
