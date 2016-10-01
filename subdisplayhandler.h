@@ -64,7 +64,7 @@ public:
      * \param model The model to be used as master.
      * \sa model()
      */
-    void setModel(PresModel* model);
+    virtual void setModel(PresModel* model);
     /*!
      * \brief Get the master model
      *

@@ -77,6 +77,9 @@ void ProjControllerPane::setModel(PresModel *model)
     }
 
     mSlidesView->setModel(model);
+    if (model == NULL)
+        return;
+
     mSlidesView->setCurrentIndex(model->getCurentIndex());
     mSlidesView->center(model->getCurentIndex());
 

@@ -24,9 +24,10 @@ SubDisplayHandler::~SubDisplayHandler(void)
 
 void SubDisplayHandler::setModel(PresModel* model)
 {
-    if (mModel != NULL)
+    if (mModel != NULL) {
         disconnect(mModel, SIGNAL(virtualScreenNumberChanged()),
                 this, SLOT(updateDisplayActions()));
+    }
     mModel = model;
     if (mModel != NULL)
         connect(mModel, SIGNAL(virtualScreenNumberChanged()),
@@ -35,6 +36,7 @@ void SubDisplayHandler::setModel(PresModel* model)
     for (int d = 0; d < size(); d++)
         if (at(d) != NULL)
             at(d)->setModel(model);
+    updateDisplayActions();
 }
 
 void SubDisplayHandler::load(const QString& file, int h, int v)

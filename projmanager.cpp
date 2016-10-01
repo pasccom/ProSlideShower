@@ -1,6 +1,5 @@
 #include "projmanager.h"
 #include "presmodel.h"
-#include "projcontroller.h"
 #include "projdisplay.h"
 
 #include "tests/desktopsimulatorwidget.h"
@@ -22,10 +21,8 @@ ProjManager::ProjManager(QObject *parent) :
     DesktopSimulatorWidget *desktop = new DesktopSimulatorWidget(SIMULATING_H_DESKTOPS, SIMULATING_V_DESKTOPS);
 #endif
 
-    setModel(new PresModel(QString::null, this));
-
     if (desktop->screenCount() > 1) {
-        mController = new ProjController(model(), NULL);
+        mController = new ProjController(NULL, NULL);
         mController->setGeometry(desktop->screenGeometry(desktop->primaryScreen()));
         mController->show();
         mController->setPaneHeight(200);
@@ -39,6 +36,8 @@ ProjManager::ProjManager(QObject *parent) :
     } else {
         mController = NULL;
     }
+
+    setModel(new PresModel(QString::null, this));
 
     resize(desktop->screenCount());
 
@@ -66,6 +65,14 @@ ProjManager::~ProjManager(void)
 {
     if (mController != NULL)
         delete mController;
+}
+
+void ProjManager::setModel(PresModel* model)
+{
+    this->model()->deleteLater();
+    SubDisplayHandler::setModel(model);
+    if (mController != NULL)
+        mController->setModel(model);
 }
 
 bool ProjManager::eventFilter(QObject* watched, QEvent* event)

@@ -98,21 +98,21 @@ ProjController::ProjController(PresModel *model, QWidget *parent) :
 
     setLayout(mainLayout);
 
-    handleFrameChange();
-    mDisplays->updateDisplayActions();
-
     connect(mTimer, SIGNAL(timeout()),
             this, SLOT(handleSecondStep()));
-    connect(model, SIGNAL(documentChanged()),
-            this, SLOT(handleDocumentChange()));
-    connect(model, SIGNAL(currentFrameChanged()),
-            this, SLOT(handleFrameChange()));
     connect(mPane, SIGNAL(openDocumentRequest()),
             mDisplays, SLOT(load()));
     connect(mPane, SIGNAL(configureRequest()),
             this, SLOT(configure()));
     connect(configAction, SIGNAL(triggered()),
             this, SLOT(configure()));
+
+    if (model != NULL) {
+        connect(model, SIGNAL(documentChanged()),
+                this, SLOT(handleDocumentChange()));
+        connect(model, SIGNAL(currentFrameChanged()),
+                this, SLOT(handleFrameChange()));
+    }
 }
 
 ProjController::~ProjController(void)
