@@ -69,7 +69,8 @@ ProjManager::~ProjManager(void)
 
 void ProjManager::setModel(PresModel* model)
 {
-    this->model()->deleteLater();
+    if (this->model() != NULL)
+        this->model()->deleteLater();
     SubDisplayHandler::setModel(model);
     if (mController != NULL)
         mController->setModel(model);
