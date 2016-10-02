@@ -52,7 +52,7 @@ public:
      * \param model The PresModel being presented.
      * \sa model()
      */
-    inline void setModel(PresModel* model) {mDisplays->setModel(model); mPane->setModel(model);}
+    void setModel(PresModel* model);
     /*!
      * \brief Get the model
      *

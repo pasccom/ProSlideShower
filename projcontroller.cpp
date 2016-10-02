@@ -119,6 +119,27 @@ ProjController::~ProjController(void)
     settings.setValue("totalTime", mTotalTime);
 }
 
+void ProjController::setModel(PresModel* model)
+{
+    if (this->model() != NULL) {
+        disconnect(this->model(), SIGNAL(documentChanged()),
+                this, SLOT(handleDocumentChange()));
+        disconnect(this->model(), SIGNAL(currentFrameChanged()),
+                this, SLOT(handleFrameChange()));
+    }
+
+    mDisplays->setModel(model);
+    mPane->setModel(model);
+
+    if (model != NULL) {
+        connect(model, SIGNAL(documentChanged()),
+                this, SLOT(handleDocumentChange()));
+        connect(model, SIGNAL(currentFrameChanged()),
+                this, SLOT(handleFrameChange()));
+        updateFrame();
+    }
+}
+
 void ProjController::stop(void)
 {
     if (mTimer->isActive())
@@ -164,7 +185,10 @@ void ProjController::updateFrame(void)
     mSlideProgress->setRange(1, mDisplays->model()->getFrameCount());
     mSlideProgress->setValue(mDisplays->model()->getCurrentFrameNumber());
 
-    mSlideLabel->setText(QString("%1/%2").arg(mDisplays->model()->getCurrentFrameNumber()).arg(mDisplays->model()->getFrameCount()));
+    if (mDisplays->model()->getFrameCount() != 0)
+        mSlideLabel->setText(QString("%1/%2").arg(mDisplays->model()->getCurrentFrameNumber()).arg(mDisplays->model()->getFrameCount()));
+    else
+        mSlideLabel->setText("");
 
     updateColor();
 }
