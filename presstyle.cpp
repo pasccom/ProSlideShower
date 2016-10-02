@@ -5,6 +5,96 @@
 #   include <QtWidgets>
 #endif
 
+void PresStyle::drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget) const
+{
+    if (control == CC_ScrollBar) {
+        const QStyleOptionSlider* sliderOpt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+        if (sliderOpt == NULL)
+            return;
+
+        QStyleOptionSlider opt = *sliderOpt;
+        State stateFlags = opt.state;
+
+        painter->setPen(QPen(opt.palette.brush(QPalette::WindowText), 2., Qt::SolidLine, Qt::RoundCap));
+        painter->drawRoundedRect(1, opt.rect.height() / 2 - 6, opt.rect.width() - 2, 12, 6., 6.);
+
+        if (sliderOpt->subControls & SC_ScrollBarSubLine) {
+            opt.rect = sliderOpt->rect;
+            opt.state = stateFlags;
+            opt.rect = proxy()->subControlRect(control, &opt, SC_ScrollBarSubLine, widget);
+            if (opt.rect.isValid()) {
+                if (!(sliderOpt->activeSubControls & SC_ScrollBarSubLine))
+                    opt.state &= ~(State_Sunken | State_MouseOver);
+                proxy()->drawControl(CE_ScrollBarSubLine, &opt, painter, widget);
+            }
+        }
+        if (sliderOpt->subControls & SC_ScrollBarAddLine) {
+            opt.rect = sliderOpt->rect;
+            opt.state = stateFlags;
+            opt.rect = proxy()->subControlRect(control, &opt, SC_ScrollBarAddLine, widget);
+            if (opt.rect.isValid()) {
+                if (!(sliderOpt->activeSubControls & SC_ScrollBarAddLine))
+                    opt.state &= ~(State_Sunken | State_MouseOver);
+                proxy()->drawControl(CE_ScrollBarAddLine, &opt, painter, widget);
+            }
+        }
+        if (sliderOpt->subControls & SC_ScrollBarSubPage) {
+            opt.rect = sliderOpt->rect;
+            opt.state = stateFlags;
+            opt.rect = proxy()->subControlRect(control, &opt, SC_ScrollBarSubPage, widget);
+            if (opt.rect.isValid()) {
+                if (!(sliderOpt->activeSubControls & SC_ScrollBarSubPage))
+                    opt.state &= ~(State_Sunken | State_MouseOver);
+                proxy()->drawControl(CE_ScrollBarSubPage, &opt, painter, widget);
+            }
+        }
+        if (sliderOpt->subControls & SC_ScrollBarAddPage) {
+            opt.rect = sliderOpt->rect;
+            opt.state = stateFlags;
+            opt.rect = proxy()->subControlRect(control, &opt, SC_ScrollBarAddPage, widget);
+            if (opt.rect.isValid()) {
+                if (!(sliderOpt->activeSubControls & SC_ScrollBarAddPage))
+                    opt.state &= ~(State_Sunken | State_MouseOver);
+                proxy()->drawControl(CE_ScrollBarAddPage, &opt, painter, widget);
+            }
+        }
+        if (sliderOpt->subControls & SC_ScrollBarFirst) {
+            opt.rect = sliderOpt->rect;
+            opt.state = stateFlags;
+            opt.rect = proxy()->subControlRect(control, &opt, SC_ScrollBarFirst, widget);
+            if (opt.rect.isValid()) {
+                if (!(sliderOpt->activeSubControls & SC_ScrollBarFirst))
+                    opt.state &= ~(State_Sunken | State_MouseOver);
+                proxy()->drawControl(CE_ScrollBarFirst, &opt, painter, widget);
+            }
+        }
+        if (sliderOpt->subControls & SC_ScrollBarLast) {
+            opt.rect = sliderOpt->rect;
+            opt.state = stateFlags;
+            opt.rect = proxy()->subControlRect(control, &opt, SC_ScrollBarLast, widget);
+            if (opt.rect.isValid()) {
+                if (!(sliderOpt->activeSubControls & SC_ScrollBarLast))
+                    opt.state &= ~(State_Sunken | State_MouseOver);
+                proxy()->drawControl(CE_ScrollBarLast, &opt, painter, widget);
+            }
+        }
+        if (sliderOpt->subControls & SC_ScrollBarSlider) {
+            opt.rect = sliderOpt->rect;
+            opt.state = stateFlags;
+            opt.rect = proxy()->subControlRect(control, &opt, SC_ScrollBarSlider, widget);
+            if (opt.rect.isValid()) {
+                if (!(sliderOpt->activeSubControls & SC_ScrollBarSlider))
+                    opt.state &= ~(State_Sunken | State_MouseOver);
+                proxy()->drawControl(CE_ScrollBarSlider, &opt, painter, widget);
+            }
+        }
+        return;
+    }
+
+    QProxyStyle::drawComplexControl(control, option, painter, widget);
+}
+
+
 void PresStyle::drawControl(ControlElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
 {
     if (element == CE_ProgressBar) {
@@ -44,6 +134,81 @@ void PresStyle::drawControl(ControlElement element, const QStyleOption* option, 
         return;
     }
 
+    if (element == CE_ScrollBarAddLine) {
+        const QStyleOptionSlider* opt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+
+        painter->setPen(QPen(opt->palette.brush(QPalette::WindowText), 10., Qt::SolidLine, Qt::RoundCap));
+        //painter->setPen(QPen(Qt::red, 10., Qt::SolidLine, Qt::RoundCap));
+        painter->drawLine(opt->rect.x() - 2, opt->rect.height() / 2, opt->rect.right() - 6, opt->rect.height() / 2);
+
+        if (opt->state & State_Sunken)
+            painter->setPen(QPen(Qt::red, 3., Qt::SolidLine, Qt::RoundCap));
+        else if (opt->state & State_MouseOver)
+             painter->setPen(QPen(Qt::darkRed, 3., Qt::SolidLine, Qt::RoundCap));
+        else
+            painter->setPen(QPen(opt->palette.color(QPalette::Window), 3., Qt::SolidLine, Qt::RoundCap));
+        painter->drawLine(opt->rect.right() - 4, opt->rect.height() / 2, opt->rect.right() - 10, opt->rect.height() / 2 - 4);
+        painter->drawLine(opt->rect.right() - 4, opt->rect.height() / 2, opt->rect.right() - 10, opt->rect.height() / 2 + 4);
+        return;
+    }
+    if (element == CE_ScrollBarSubLine) {
+        const QStyleOptionSlider* opt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+
+        painter->setPen(QPen(opt->palette.brush(QPalette::WindowText), 10., Qt::SolidLine, Qt::RoundCap));
+        //painter->setPen(QPen(Qt::blue, 10., Qt::SolidLine, Qt::RoundCap));
+        painter->drawLine(opt->rect.x() + 7, opt->rect.height() / 2, opt->rect.right() + 2, opt->rect.height() / 2);
+
+        if (opt->state & State_Sunken)
+            painter->setPen(QPen(Qt::red, 3., Qt::SolidLine, Qt::RoundCap));
+        else if (opt->state & State_MouseOver)
+            painter->setPen(QPen(Qt::darkRed, 3., Qt::SolidLine, Qt::RoundCap));
+        else
+            painter->setPen(QPen(opt->palette.color(QPalette::Window), 3., Qt::SolidLine, Qt::RoundCap));
+        painter->drawLine(opt->rect.left() + 5, opt->rect.height() / 2, opt->rect.left() + 11, opt->rect.height() / 2 - 4);
+        painter->drawLine(opt->rect.left() + 5, opt->rect.height() / 2, opt->rect.left() + 11, opt->rect.height() / 2 + 4);
+        return;
+    }
+    if (element == CE_ScrollBarAddPage) {
+        const QStyleOptionSlider* opt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+
+        if (opt->state & State_Sunken)
+            painter->setPen(QPen(QColor(Qt::darkGray).darker(), 10., Qt::SolidLine, Qt::RoundCap));
+        else
+            painter->setPen(QPen(opt->palette.color(QPalette::Window), 10., Qt::SolidLine, Qt::RoundCap));
+        //painter->setPen(QPen(Qt::darkRed, 10., Qt::SolidLine, Qt::RoundCap));
+        painter->drawLine(opt->rect.left() - 5, opt->rect.height() / 2, opt->rect.right() - 4, opt->rect.height() / 2);
+    }
+    if (element == CE_ScrollBarSubPage) {
+        const QStyleOptionSlider* opt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+
+        if (opt->state & State_Sunken)
+            painter->setPen(QPen(QColor(Qt::darkGray).darker(), 10., Qt::SolidLine, Qt::RoundCap));
+        else
+            painter->setPen(QPen(opt->palette.color(QPalette::Window), 10., Qt::SolidLine, Qt::RoundCap));
+        //painter->setPen(QPen(Qt::darkBlue, 10., Qt::SolidLine, Qt::RoundCap));
+        painter->drawLine(opt->rect.left() + 4, opt->rect.height() / 2, opt->rect.right() + 5, opt->rect.height() / 2);
+    }
+    if (element == CE_ScrollBarFirst) {
+        const QStyleOptionSlider* opt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+        qWarning() << "Draw CE_ScrollBarFirst with PresStyle" << opt->rect;
+        return;
+    }
+    if (element == CE_ScrollBarLast) {
+        const QStyleOptionSlider* opt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+        qWarning() << "Draw CE_ScrollBarLast with PresStyle" << opt->rect;
+        return;
+    }
+    if (element == CE_ScrollBarSlider) {
+        const QStyleOptionSlider* opt = qstyleoption_cast<const QStyleOptionSlider*>(option);
+
+        if (opt->state & (State_MouseOver | State_Sunken))
+            painter->setPen(QPen(opt->palette.color(QPalette::WindowText), 10., Qt::SolidLine, Qt::RoundCap));
+        else
+            painter->setPen(QPen(opt->palette.color(QPalette::WindowText).darker(), 10., Qt::SolidLine, Qt::RoundCap));
+        //painter->setPen(QPen(Qt::green, 10., Qt::SolidLine, Qt::RoundCap));
+        painter->drawLine(opt->rect.left() + 5, opt->rect.height() / 2, opt->rect.right() - 5, opt->rect.height() / 2);
+        return;
+    }
 
     QProxyStyle::drawControl(element, option, painter, widget);
 }

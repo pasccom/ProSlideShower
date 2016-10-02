@@ -33,6 +33,7 @@ public:
     inline PresStyle(const QString& key) :
         QProxyStyle(key) {}
 #endif
+    void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option, QPainter *painter, const QWidget *widget = NULL) const;
     /*!
      * \brief Draw a control
      *
