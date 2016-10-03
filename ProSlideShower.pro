@@ -51,6 +51,10 @@ TRANSLATIONS +=             \
     proslideshower_en.ts    \
     proslideshower_fr.ts    \
 
+OTHER_FILES +=              \
+    main.dox                \
+    README.md               \
+
 exists(ProSlideShower.local.pri) {
     include(ProSlideShower.local.pri)
 }

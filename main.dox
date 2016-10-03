@@ -55,7 +55,7 @@
  *  \li Progress bars: One give the slide (or frame if Beamer <tt>*.aux</tt>
  * or <tt>*.nav</tt> file can be found) progress; the other displays the time ellapsed
  * over the total presentation time (which can be configured in the configure menu).
- * The color of the progress bar tell whether the presentation is too fast or too slow
+ * The color of the progress bar tells whether the presentation is too fast or too slow
  * as follows: Blue is too fast, green is fast, white is OK, yellow is slow, and red very slow.
  * The presentation starts automatically when the next slide is shown. However, it can also
  * be managed with \ref shortcuts.
